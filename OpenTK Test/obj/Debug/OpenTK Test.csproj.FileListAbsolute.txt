@@ -1,0 +1,10 @@
+c:\users\ryan\documents\visual studio 2015\Projects\OpenTK Test\bin\Debug\OpenTK Test.exe.config
+c:\users\ryan\documents\visual studio 2015\Projects\OpenTK Test\bin\Debug\OpenTK Test.exe
+c:\users\ryan\documents\visual studio 2015\Projects\OpenTK Test\bin\Debug\OpenTK Test.pdb
+c:\users\ryan\documents\visual studio 2015\Projects\OpenTK Test\bin\Debug\OpenTK.dll
+c:\users\ryan\documents\visual studio 2015\Projects\OpenTK Test\obj\Debug\OpenTK Test.csprojResolveAssemblyReference.cache
+c:\users\ryan\documents\visual studio 2015\Projects\OpenTK Test\obj\Debug\OpenTK Test.exe
+c:\users\ryan\documents\visual studio 2015\Projects\OpenTK Test\obj\Debug\OpenTK Test.pdb
+C:\Users\Ryan\Documents\GitHub\Windup\OpenTK Test\bin\Debug\OpenTK Test.exe.config
+C:\Users\Ryan\Documents\GitHub\Windup\OpenTK Test\obj\Debug\OpenTK Test.exe
+C:\Users\Ryan\Documents\GitHub\Windup\OpenTK Test\obj\Debug\OpenTK Test.pdb
