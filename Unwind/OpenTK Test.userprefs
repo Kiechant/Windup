@@ -1,0 +1,17 @@
+﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Shape.cs">
+    <Files>
+      <File FileName="Program.cs" Line="57" Column="10" />
+      <File FileName="Shape.cs" Line="15" Column="27" />
+      <File FileName="ShapeBuilder.cs" Line="122" Column="4" />
+      <File FileName="Triangulation.cs" Line="47" Column="31" />
+      <File FileName="Mathc.cs" Line="9" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Unwind PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

@@ -1,0 +1,9 @@
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/.NETFramework,Version=v4.5.2.AssemblyAttribute.cs
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/OpenTK Test.exe
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/OpenTK Test.pdb
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK.dll
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.exe.config
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.exe.mdb
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.pdb
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.exe
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/OpenTK Test.exe.mdb

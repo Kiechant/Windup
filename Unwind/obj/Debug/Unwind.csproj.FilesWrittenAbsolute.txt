@@ -1,0 +1,16 @@
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/.NETFramework,Version=v4.5.2.AssemblyAttribute.cs
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/OpenTK Test.exe
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/OpenTK Test.exe.mdb
+/Users/Kieren/Documents/Windup/OpenTK Test/obj/Debug/OpenTK Test.pdb
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK.dll
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.exe.config
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.exe.mdb
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.pdb
+/Users/Kieren/Documents/Windup/OpenTK Test/bin/Debug/OpenTK Test.exe
+/Users/Kieren/Documents/Windup/Unwind/obj/Debug/.NETFramework,Version=v4.5.2.AssemblyAttribute.cs
+/Users/Kieren/Documents/Windup/Unwind/bin/Debug/OpenTK.dll
+/Users/Kieren/Documents/Windup/Unwind/bin/Debug/Unwind.exe.config
+/Users/Kieren/Documents/Windup/Unwind/bin/Debug/Unwind.exe.mdb
+/Users/Kieren/Documents/Windup/Unwind/bin/Debug/Unwind.exe
+/Users/Kieren/Documents/Windup/Unwind/obj/Debug/Unwind.exe
+/Users/Kieren/Documents/Windup/Unwind/obj/Debug/Unwind.exe.mdb
