@@ -4,11 +4,11 @@ namespace Unwind
 {
 	public class Updater
 	{
-		public event EventHandler<EventArgs> FrameUpdated;
+		public event EventHandler<EventArgs> Updated;
 
-		public virtual void OnUpdateFrame()
+		public virtual void OnUpdate()
 		{
-			if (FrameUpdated != null) FrameUpdated(this, EventArgs.Empty);
+			if (Updated != null) Updated(this, EventArgs.Empty);
 		}
 	}
 }

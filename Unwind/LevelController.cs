@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 
@@ -42,9 +43,9 @@ namespace Unwind
 			triangle = builder.Build();
 		}
 
-		public override void OnUpdateFrame(object source, EventArgs e)
+		public override void OnUpdate(object source, EventArgs e)
 		{
-			base.OnUpdateFrame(source, e);
+			base.OnUpdate(source, e);
 
 			if (timeSinceSpawn >= timeNextSpawn)
 			{
@@ -71,25 +72,18 @@ namespace Unwind
 			triangle.Update();
 		}
 
-		// TODO: Remove function
-		public Vector2[] GetVertices()
+		public override void OnRender(object source, EventArgs e)
 		{
-			List<Vector2> vertices = new List<Vector2>();
-			foreach (Obstacle o in obstacles)
-			{
-				//vertices.AddRange(o.GetVertices());
-			}
-			return vertices.ToArray();
-		}
+			base.OnRender(source, e);
 
-		public void Draw()
-		{
 			foreach (Obstacle o in obstacles)
 			{
 				o.Draw();
 			}
 
 			triangle.Draw();
+
+
 		}
 	}
 }

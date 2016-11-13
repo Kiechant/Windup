@@ -6,6 +6,8 @@ namespace Unwind
 	{
 		public virtual void Start() { }
 
-		public virtual void OnUpdateFrame(object source, EventArgs e) { }
+		public virtual void OnUpdate(object source, EventArgs e) { }
+
+		public virtual void OnRender(object source, EventArgs e) { }
 	}
 }

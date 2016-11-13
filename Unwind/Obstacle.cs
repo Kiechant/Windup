@@ -6,7 +6,7 @@ namespace Unwind
 	public abstract class Obstacle
 	{
 		public const float SpawnRadius = 1.0f;
-		public const float BaseFallRate = 1.0f;
+		public const float BaseFallRate = 0.5f;
 
 		private static uint nextID;
 		public uint ID { get; private set; }

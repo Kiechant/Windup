@@ -27,9 +27,17 @@ namespace StarterKit
 		Shader shader;
 
         public Game()
-            : base(800, 600, GraphicsMode.Default, "Unwind")
+			: base(800, 600, GraphicsMode.Default, "Unwind")
         {
             VSync = VSyncMode.On;
+
+			IGraphicsContext context = new GraphicsContext(GraphicsMode.Default, WindowInfo, 2, 1, GraphicsContextFlags.ForwardCompatible);
+			context.MakeCurrent(WindowInfo);
+
+			IGraphicsContext _context = GraphicsContext.CurrentContext;
+			Console.WriteLine(_context.GraphicsMode);
+			Console.WriteLine(_context.IsCurrent);
+			Console.WriteLine(GL.GetString(StringName.Version));
 
 			shader = new Shader("./res/BasicShader");
 
@@ -45,12 +53,10 @@ namespace StarterKit
 
 			controller = new LevelController();
 			controller.Start();
-			this.UpdateFrame += (sender, args) => { Console.WriteLine("Loaded"); };
 
-			// TODO: remove updater and replace with UpdateFrame
 			updater = new Updater();
-			updater.FrameUpdated += Time.OnUpdateFrame;
-			updater.FrameUpdated += controller.OnUpdateFrame;
+			updater.Updated += Time.OnUpdate;
+			updater.Updated += controller.OnUpdate;
 
             GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
@@ -71,17 +77,19 @@ namespace StarterKit
         {
             base.OnUpdateFrame(e);
 
+			Console.WriteLine("\nGameWindow update frame");
+
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			updater.OnUpdateFrame();
+			updater.OnUpdate();
 
-			GL.Begin(PrimitiveType.Triangles);
+			//GL.Begin(PrimitiveType.Triangles);
 
 			//GL.Color3(1.0f, 1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 4.0f);
 			//GL.Color3(1.0f, 0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 4.0f);
 			//GL.Color3(0.2f, 0.9f, 1.0f); GL.Vertex3(0.0f, 1.0f, 4.0f);
 
-			GL.End();
+			//GL.End();
 
             if (Keyboard[Key.Escape])
                 Exit();
@@ -101,7 +109,7 @@ namespace StarterKit
 
 			//GL.Begin(PrimitiveType.Triangles);
 
-			((LevelController)controller).Draw();
+			((LevelController)controller).OnRender(this, new EventArgs());
 
             SwapBuffers();
         }
@@ -109,7 +117,7 @@ namespace StarterKit
         [STAThread]
         static void Main()
         {
-            // The 'using' idiom guarantees proper resource cleanup.
+			// The 'using' idiom guarantees proper resource cleanup.
             // We request 30 UpdateFrame events per second, and unlimited
             // RenderFrame events (as fast as the computer can handle).
             using (Game game = new Game())

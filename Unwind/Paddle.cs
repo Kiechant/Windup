@@ -8,7 +8,7 @@ namespace Unwind
 	{
 		public const float MinSize = MathHelper.PiOver4;
 		public const float MaxSize = MathHelper.PiOver4 + MathHelper.PiOver2;
-		public const float Thickness = 0.2f;
+		public const float Thickness = 0.1f;
 
 		private float startAngle;
 		private float endAngle;
@@ -35,6 +35,7 @@ namespace Unwind
 			ProcessAppearance();
 
 			// DEBUG
+			Console.WriteLine(Time.deltaTimeSeconds);
 			Console.WriteLine("Paddle " + ID + " updated. r: " + radius);
 		}
 

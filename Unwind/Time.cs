@@ -18,7 +18,7 @@ namespace Unwind
 			watch.Start();
 		}
 
-		public static void OnUpdateFrame(object source, EventArgs e)
+		public static void OnUpdate(object source, EventArgs e)
 		{
 			deltaTime = watch.ElapsedMilliseconds;
 			watch.Restart();
