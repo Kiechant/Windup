@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Unwind
 {
-	public abstract class Obstacle
+	public abstract class Obstacle : IDisposable
 	{
 		public const float SpawnRadius = 1.0f;
 		public const float BaseFallRate = 0.5f;
@@ -24,9 +24,10 @@ namespace Unwind
 			this.fallRate = BaseFallRate;
 		}
 
-		public virtual void Update()
+		public virtual void Update(out bool disposed)
 		{
 			shape.Update();
+			disposed = false;
 		}
 
 		public void Draw()
@@ -35,6 +36,13 @@ namespace Unwind
 
 			// DEBUG
 			Console.WriteLine("Obstacle " + ID + " drawn.");
+		}
+
+		public void Dispose()
+		{
+			shape.Dispose();
+			Console.WriteLine("Dispose obstacle " + ID);
+			return;
 		}
 	}
 }

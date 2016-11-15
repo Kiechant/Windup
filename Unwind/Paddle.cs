@@ -23,16 +23,17 @@ namespace Unwind
 			this.endAngle = startAngle + angularSize;
 			this.steps = steps;
 
-			ProcessAppearance();
+			bool disposed;
+			ProcessAppearance(out disposed);
 			SetTriangles();
 		}
 
-		public override void Update()
+		public override void Update(out bool disposed)
 		{
-			base.Update();
+			base.Update(out disposed);
 
 			radius -= Time.deltaTimeSeconds * fallRate;
-			ProcessAppearance();
+			ProcessAppearance(out disposed);
 
 			// DEBUG
 			Console.WriteLine(Time.deltaTimeSeconds);
@@ -40,7 +41,7 @@ namespace Unwind
 		}
 
 		/* Updates shape appearance following a transformation. */
-		private void ProcessAppearance()
+		private void ProcessAppearance(out bool disposed)
 		{
 			float ringRadius = 0.1f;
 			float drawRadius = radius;
@@ -49,6 +50,8 @@ namespace Unwind
 			if (radius < ringRadius - Thickness)
 			{
 				// TODO: delete object
+				disposed = true;
+				Dispose();
 				return;
 			}
 			if (radius < ringRadius)
@@ -58,6 +61,8 @@ namespace Unwind
 			}
 
 			SetVertices(drawRadius, drawThickness);
+
+			disposed = false;
 		}
 
 		/* Builds the contour of the paddle and assigns the vertices to the mesh.

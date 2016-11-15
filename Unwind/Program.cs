@@ -31,8 +31,8 @@ namespace StarterKit
         {
             VSync = VSyncMode.On;
 
-			IGraphicsContext context = new GraphicsContext(GraphicsMode.Default, WindowInfo, 2, 1, GraphicsContextFlags.ForwardCompatible);
-			context.MakeCurrent(WindowInfo);
+			//IGraphicsContext context = new GraphicsContext(GraphicsMode.Default, WindowInfo, 2, 1, GraphicsContextFlags.ForwardCompatible);
+			//context.MakeCurrent(WindowInfo);
 
 			IGraphicsContext _context = GraphicsContext.CurrentContext;
 			Console.WriteLine(_context.GraphicsMode);

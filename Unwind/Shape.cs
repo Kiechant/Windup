@@ -6,14 +6,16 @@ namespace Unwind
 {
 	/* Defines a polygon by a sequential set of vertices,
 	 and triangles for mesh calculations. */
-	public class Shape
+	public class Shape : IDisposable
 	{
 		public Vector2[] vertices;
 		public int[] triangles;
 
-		private int vbo;
-		private int vao;
-		private static int attribPtrIndex = 0;
+		private int positionBuffer;
+		private int positionAttrib;
+		private int indexBuffer;
+		private int indexAttrib;
+		private static int nextAttribPtrHandle = 0;
 
 		public Shape()
 		{
@@ -31,8 +33,23 @@ namespace Unwind
 
 		private void Setup()
 		{
-			vao = GL.GenVertexArray();
-			vbo = GL.GenBuffer();
+			uint[] indices = new uint[triangles.Length];
+
+			for (uint i = 0; i < indices.Length; i++)
+			{
+				indices[i] = i;
+			}
+
+			//indexBuffer = GL.GenBuffer();
+			//GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
+			//GL.BufferData(BufferTarget.ElementArrayBuffer, triangles.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
+
+			//indexAttrib = nextAttribPtrHandle++;
+			//GL.VertexAttribPointer(indexAttrib, 1, VertexAttribPointerType.UnsignedInt, false, 0, 0);
+			//GL.EnableVertexAttribArray(indexAttrib);
+
+			positionBuffer = GL.GenBuffer();
+			Update();
 		}
 
 		public void Update()
@@ -48,33 +65,30 @@ namespace Unwind
 				newTriangles[2 * i + 1] = vertex.Y;
 			}
 
-			GL.BindVertexArray(vao);
-
-			GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-			GL.BufferData(BufferTarget.ArrayBuffer, count * sizeof(float), newTriangles, BufferUsageHint.StaticDraw);
-
-			GL.VertexAttribPointer(attribPtrIndex, 2, VertexAttribPointerType.Float, false, 0, 0);
-			GL.EnableVertexAttribArray(attribPtrIndex);
-
-			GL.BindVertexArray(0);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, positionBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, count * sizeof(float), newTriangles, BufferUsageHint.DynamicDraw);
 		}
 
 		public void Draw()
 		{
-			//GL.BindVertexArray(vao);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, positionBuffer);
 
-			int[] indices = new int[2 * triangles.Length];
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
+			GL.EnableVertexAttribArray(0);
 
-			for (int i = 0; i < indices.Length; i++)
-			{
-				indices[i] = i;
-			}
+			//GL.DrawElements(PrimitiveType.Triangles, triangles.Length, DrawElementsType.UnsignedInt, indexBuffer);
+			GL.DrawArrays(PrimitiveType.Triangles, 0, 2 * triangles.Length);
 
-			GL.DrawElements(PrimitiveType.Triangles, 2 * triangles.Length, DrawElementsType.UnsignedInt, indices);
-			//GL.DrawArrays(PrimitiveType.Triangles, 0, 2 * triangles.Length);
+			GL.DisableVertexAttribArray(0);
+		}
 
-			GL.BindVertexArray(0);
+		public void Dispose()
+		{
+			GL.DeleteBuffer(positionBuffer);
+			//GL.DeleteBuffer(indexBuffer);
+
+			Console.WriteLine("Disposing shape");
+			return;
 		}
 	}
 }

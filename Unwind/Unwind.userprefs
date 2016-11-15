@@ -1,36 +1,21 @@
 ﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
   <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="Program.cs" Line="32" Column="34" />
-      <File FileName="Shape.cs" Line="37" Column="3" />
-      <File FileName="ShapeBuilder.cs" Line="21" Column="25" />
-      <File FileName="Obstacle.cs" Line="37" Column="1" />
-      <File FileName="Paddle.cs" Line="98" Column="4" />
+      <File FileName="Program.cs" Line="36" Column="4" />
+      <File FileName="Shape.cs" Line="43" Column="1" />
+      <File FileName="ShapeBuilder.cs" Line="88" Column="15" />
+      <File FileName="Obstacle.cs" Line="6" Column="42" />
+      <File FileName="Paddle.cs" Line="48" Column="4" />
       <File FileName="Controller.cs" Line="10" Column="3" />
-      <File FileName="LevelController.cs" Line="82" Column="5" />
+      <File FileName="LevelController.cs" Line="43" Column="31" />
       <File FileName="Time.cs" Line="16" Column="4" />
       <File FileName="Updater.cs" Line="9" Column="33" />
       <File FileName="Shader.cs" Line="41" Column="4" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Unwind" expanded="True">
-            <Node name="Unwind" expanded="True">
-              <Node name="References" expanded="True">
-                <Node name="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/Kieren/Documents/Windup/Unwind/Program.cs" line="39" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Unwind PreferredExecutionTarget="MonoDevelop.Default" />

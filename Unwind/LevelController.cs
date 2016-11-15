@@ -67,7 +67,12 @@ namespace Unwind
 				timeSinceSpawn += Time.deltaTimeSeconds;
 			}
 
-			foreach (var obstacle in obstacles) obstacle.Update();
+			for (int i = 0; i < obstacles.Count; i++)
+			{
+				bool disposed;
+				obstacles[i].Update(out disposed);
+				if (disposed) obstacles.RemoveAt(i);
+			}
 
 			triangle.Update();
 		}
