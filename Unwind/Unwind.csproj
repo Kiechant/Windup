@@ -57,10 +57,11 @@
     <Compile Include="Obstacle.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="LevelController.cs" />
-    <Compile Include="Updater.cs" />
+    <Compile Include="GameEventsManager.cs" />
     <Compile Include="Paddle.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Shader.cs" />
+    <Compile Include="Raindrop.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

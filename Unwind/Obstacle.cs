@@ -17,18 +17,14 @@ namespace Unwind
 
 		protected Shape shape = new Shape();
 
-		public Obstacle()
+		protected Obstacle()
 		{
 			this.ID = nextID++;
 			this.radius = SpawnRadius;
 			this.fallRate = BaseFallRate;
 		}
 
-		public virtual void Update(out bool disposed)
-		{
-			shape.Update();
-			disposed = false;
-		}
+		public abstract void Update(out bool disposed);
 
 		public void Draw()
 		{

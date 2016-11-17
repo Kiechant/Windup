@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using System;
 
 namespace Unwind
@@ -21,6 +22,7 @@ namespace Unwind
 		{
 			this.startAngle = startAngle;
 			this.endAngle = startAngle + angularSize;
+			this.angle = startAngle + angularSize * 0.5f;
 			this.steps = steps;
 
 			bool disposed;
@@ -30,20 +32,16 @@ namespace Unwind
 
 		public override void Update(out bool disposed)
 		{
-			base.Update(out disposed);
-
 			radius -= Time.deltaTimeSeconds * fallRate;
 			ProcessAppearance(out disposed);
 
-			// DEBUG
-			Console.WriteLine(Time.deltaTimeSeconds);
-			Console.WriteLine("Paddle " + ID + " updated. r: " + radius);
+			shape.Update();
 		}
 
 		/* Updates shape appearance following a transformation. */
 		private void ProcessAppearance(out bool disposed)
 		{
-			float ringRadius = 0.1f;
+			float ringRadius = 0.2f;
 			float drawRadius = radius;
 			float drawThickness = Thickness;
 
@@ -87,18 +85,15 @@ namespace Unwind
 		 This should be called only once after the vertices are first set. */
 		private void SetTriangles()
 		{
+			shape.type = PrimitiveType.TriangleStrip;
+
 			int n = shape.vertices.Length;
-			int[] triangles = new int[(n - 2) * 3];
+			int[] triangles = new int[n];
 
-			for (int i = 0; i < n / 2 - 1; i++)
+			for (int i = 0; i < n / 2; i++)
 			{
-				triangles[i * 6 + 0] = i;
-				triangles[i * 6 + 1] = i + 1;
-				triangles[i * 6 + 2] = n - i - 1;
-
-				triangles[i * 6 + 3] = i + 1;
-				triangles[i * 6 + 4] = n - i - 2;
-				triangles[i * 6 + 5] = n - i - 1;
+				triangles[2 * i] = i;
+				triangles[2 * i + 1] = (n - 1) - i;
 			}
 
 			shape.triangles = triangles;

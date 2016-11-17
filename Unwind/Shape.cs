@@ -10,6 +10,7 @@ namespace Unwind
 	{
 		public Vector2[] vertices;
 		public int[] triangles;
+		public PrimitiveType type;
 
 		private int positionBuffer;
 		private int positionAttrib;
@@ -43,11 +44,7 @@ namespace Unwind
 			//indexBuffer = GL.GenBuffer();
 			//GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
 			//GL.BufferData(BufferTarget.ElementArrayBuffer, triangles.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
-
-			//indexAttrib = nextAttribPtrHandle++;
-			//GL.VertexAttribPointer(indexAttrib, 1, VertexAttribPointerType.UnsignedInt, false, 0, 0);
-			//GL.EnableVertexAttribArray(indexAttrib);
-
+			
 			positionBuffer = GL.GenBuffer();
 			Update();
 		}
@@ -76,8 +73,7 @@ namespace Unwind
 			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
 			GL.EnableVertexAttribArray(0);
 
-			//GL.DrawElements(PrimitiveType.Triangles, triangles.Length, DrawElementsType.UnsignedInt, indexBuffer);
-			GL.DrawArrays(PrimitiveType.Triangles, 0, 2 * triangles.Length);
+			GL.DrawArrays(type, 0, 2 * triangles.Length);
 
 			GL.DisableVertexAttribArray(0);
 		}
@@ -85,7 +81,6 @@ namespace Unwind
 		public void Dispose()
 		{
 			GL.DeleteBuffer(positionBuffer);
-			//GL.DeleteBuffer(indexBuffer);
 
 			Console.WriteLine("Disposing shape");
 			return;

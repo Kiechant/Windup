@@ -53,6 +53,43 @@ namespace Unwind
 			}
 		}
 
+		/* Defines an elliptical curve with a ratio a over b and defined centre point.
+		 The curve begins at the last added point and is drawn for the passed
+		 angular distance. Adds a number of points at regular intevals along the arc
+		 defined by steps. Steps must be at least 2. */
+		public void AddEllipticalCurve(Vector2 centre, float aOverB, float angularDistance, uint steps)
+		{
+			if (vertices.Count != 0 && steps >= 2)
+			{
+				Vector2 start = vertices.Last() - centre;
+
+				//float phi = Mathc.Angle(Vector2.UnitX, start);
+				float phi = Mathc.Angle(start, Vector2.UnitX);
+				double cosPhi = Math.Cos(phi);
+				double sinPhi = Math.Sin(phi);
+
+				float a = (float)(Mathc.Distance(start, Vector2.Zero));
+				float b = a / aOverB;
+
+				float delta = angularDistance / steps;
+				float t = 0.0f;
+
+				for (int i = 1; Math.Abs(t) < Math.Abs(angularDistance) - Mathc.Epsilon; i++)
+				{
+					t = delta * i;
+
+					double cosT = Math.Cos(t);
+					double sinT = Math.Sin(t);
+
+					float x = (float)(a * cosT * cosPhi - b * sinT * sinPhi);
+					float y = (float)(a * cosT * sinPhi + b * sinT * cosPhi);
+					Vector2 current = new Vector2(x, y);
+
+					vertices.Add(current + centre);
+				}
+			}
+		}
+
 		/* Sets the shape to be closed if there are at least three points.
 		 The shape will no longer be mutable and can be built as a mesh. */
 		public void Close()
@@ -70,11 +107,11 @@ namespace Unwind
 		/* Returns a 2D vector rotated around the z-axis at the origin by angle. */
 		private static Vector2 Rotate(Vector2 point, float angle)
 		{
-			float cos = (float)Math.Cos(angle);
-			float sin = (float)Math.Sin(angle);
+			double cos = Math.Cos(angle);
+			double sin = Math.Sin(angle);
 
-			float x = point.X * cos - point.Y * sin;
-			float y = point.X * sin + point.Y * cos;
+			float x = (float)(point.X * cos - point.Y * sin);
+			float y = (float)(point.X * sin + point.Y * cos);
 
 			return new Vector2(x, y);
 		}

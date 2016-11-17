@@ -20,7 +20,7 @@ namespace Unwind
 
 		private float timeSinceSpawn;
 		private float timeNextSpawn;
-		private const float minSpawnDelay = 1.0f;
+		private const float minSpawnDelay = 0.5f;
 		private const float maxSpawnDelay = 2.0f;
 
 		// TODO: LevelParameters
@@ -33,14 +33,6 @@ namespace Unwind
 		public override void Start()
 		{
 			base.Start();
-
-			// Debug draw a normal triangle shape
-			var builder = new ShapeBuilder();
-			builder.Open(new Vector2(0, 1));
-			builder.AddLine(new Vector2(-0.5f, 0.5f));
-			builder.AddLine(new Vector2(0.5f, 0.5f));
-			builder.Close();
-			triangle = builder.Build();
 		}
 
 		public override void OnUpdate(object source, EventArgs e)
@@ -49,16 +41,11 @@ namespace Unwind
 
 			if (timeSinceSpawn >= timeNextSpawn)
 			{
-				Random random = new Random();
-
-				float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
-				float angSize = (float)random.NextDouble() * (Paddle.MaxSize - Paddle.MinSize) + Paddle.MinSize;
-				uint steps = (uint)(angSize / AngleResolution);
-				      
-				obstacles.Add(new Paddle(angPos, angSize, steps));
-				Console.WriteLine("added obstacle");
+				SpawnPaddle();
+				SpawnRaindrop();
 
 				timeSinceSpawn = 0;
+				Random random = new Random();
 				timeNextSpawn = (float)random.NextDouble() * maxSpawnDelay + minSpawnDelay;
 			}
 
@@ -73,8 +60,6 @@ namespace Unwind
 				obstacles[i].Update(out disposed);
 				if (disposed) obstacles.RemoveAt(i);
 			}
-
-			triangle.Update();
 		}
 
 		public override void OnRender(object source, EventArgs e)
@@ -85,10 +70,26 @@ namespace Unwind
 			{
 				o.Draw();
 			}
+		}
 
-			triangle.Draw();
+		private void SpawnPaddle()
+		{
+			Random random = new Random();
 
+			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
+			float angSize = (float)random.NextDouble() * (Paddle.MaxSize - Paddle.MinSize) + Paddle.MinSize;
+			uint steps = (uint)(angSize / AngleResolution);
 
+			obstacles.Add(new Paddle(angPos, angSize, steps));
+		}
+
+		private void SpawnRaindrop()
+		{
+			Random random = new Random();
+
+			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
+
+			obstacles.Add(new Raindrop(angPos, 20));
 		}
 	}
 }

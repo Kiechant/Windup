@@ -22,12 +22,12 @@ namespace StarterKit
 {
     class Game : GameWindow
     {
-        Updater updater;
+		GameEventsManager eventManager;
 		Controller controller;
 		Shader shader;
 
         public Game()
-			: base(800, 600, GraphicsMode.Default, "Unwind")
+			: base(600, 600, GraphicsMode.Default, "Unwind")
         {
             VSync = VSyncMode.On;
 
@@ -40,8 +40,6 @@ namespace StarterKit
 			Console.WriteLine(GL.GetString(StringName.Version));
 
 			shader = new Shader("./res/BasicShader");
-
-			// Or move to OnUpdateFrame??
 			shader.Bind();
         }
 
@@ -54,9 +52,12 @@ namespace StarterKit
 			controller = new LevelController();
 			controller.Start();
 
-			updater = new Updater();
-			updater.Updated += Time.OnUpdate;
-			updater.Updated += controller.OnUpdate;
+			eventManager = new GameEventsManager();
+
+			eventManager.Update += Time.OnUpdate;
+			eventManager.Update += controller.OnUpdate;
+
+			eventManager.Render += controller.OnRender;
 
             GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
@@ -77,19 +78,7 @@ namespace StarterKit
         {
             base.OnUpdateFrame(e);
 
-			Console.WriteLine("\nGameWindow update frame");
-
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-			updater.OnUpdate();
-
-			//GL.Begin(PrimitiveType.Triangles);
-
-			//GL.Color3(1.0f, 1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 4.0f);
-			//GL.Color3(1.0f, 0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 4.0f);
-			//GL.Color3(0.2f, 0.9f, 1.0f); GL.Vertex3(0.0f, 1.0f, 4.0f);
-
-			//GL.End();
+			eventManager.OnUpdate();
 
             if (Keyboard[Key.Escape])
                 Exit();
@@ -99,19 +88,15 @@ namespace StarterKit
         {
             base.OnRenderFrame(e);
 
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
             Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
 
-			//List<Vector2> vertices = new List<Vector2>();
-			//vertices.AddRange(((LevelController)controller).GetVertices());
-			//Vector2[] verticesArr = vertices.ToArray();
+			eventManager.OnRender();
 
-			//GL.Begin(PrimitiveType.Triangles);
-
-			((LevelController)controller).OnRender(this, new EventArgs());
-
-            SwapBuffers();
+			SwapBuffers();
         }
 
         [STAThread]
