@@ -41,11 +41,11 @@ namespace Unwind
 
 			if (timeSinceSpawn >= timeNextSpawn)
 			{
-				SpawnPaddle();
-				SpawnRaindrop();
+				Random random = new Random();
+				SpawnPaddle(random);
+				SpawnRaindrop(random);
 
 				timeSinceSpawn = 0;
-				Random random = new Random();
 				timeNextSpawn = (float)random.NextDouble() * maxSpawnDelay + minSpawnDelay;
 			}
 
@@ -72,10 +72,8 @@ namespace Unwind
 			}
 		}
 
-		private void SpawnPaddle()
+		private void SpawnPaddle(Random random)
 		{
-			Random random = new Random();
-
 			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
 			float angSize = (float)random.NextDouble() * (Paddle.MaxSize - Paddle.MinSize) + Paddle.MinSize;
 			uint steps = (uint)(angSize / AngleResolution);
@@ -83,10 +81,8 @@ namespace Unwind
 			obstacles.Add(new Paddle(angPos, angSize, steps));
 		}
 
-		private void SpawnRaindrop()
+		private void SpawnRaindrop(Random random)
 		{
-			Random random = new Random();
-
 			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
 
 			obstacles.Add(new Raindrop(angPos, 20));

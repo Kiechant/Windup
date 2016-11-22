@@ -31,7 +31,7 @@ namespace Unwind
 			radius -= Time.deltaTimeSeconds * fallRate;
 			ProcessAppearance(out disposed);
 
-			shape.Update();
+			if (!disposed) shape.Update();
 		}
 
 		/* Updates shape appearance following a transformation. */
@@ -82,13 +82,12 @@ namespace Unwind
 			shape.type = PrimitiveType.TriangleFan;
 
 			int n = shape.vertices.Length;
-			int[] triangles = new int[n + 1];
+			int[] triangles = new int[n];
 
 			for (int i = 0; i < n; i++)
 			{
 				triangles[i] = i;
 			}
-			triangles[n] = 1;
 
 			shape.triangles = triangles;
 		}

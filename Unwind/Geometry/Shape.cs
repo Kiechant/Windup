@@ -12,7 +12,7 @@ namespace Unwind
 		public int[] triangles;
 		public PrimitiveType type;
 
-		private int positionBuffer;
+		public int positionBuffer { get; private set; }
 		private int positionAttrib;
 		private int indexBuffer;
 		private int indexAttrib;
@@ -34,23 +34,14 @@ namespace Unwind
 
 		private void Setup()
 		{
-			uint[] indices = new uint[triangles.Length];
-
-			for (uint i = 0; i < indices.Length; i++)
-			{
-				indices[i] = i;
-			}
-
-			//indexBuffer = GL.GenBuffer();
-			//GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBuffer);
-			//GL.BufferData(BufferTarget.ElementArrayBuffer, triangles.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
-			
 			positionBuffer = GL.GenBuffer();
 			Update();
 		}
 
 		public void Update()
 		{
+			// Generates triangles as a sequence of floats and assigns them to VBO
+
 			int n = triangles.Length;
 			int count = 2 * n;
 			float[] newTriangles = new float[count];
@@ -73,7 +64,7 @@ namespace Unwind
 			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
 			GL.EnableVertexAttribArray(0);
 
-			GL.DrawArrays(type, 0, 2 * triangles.Length);
+			GL.DrawArrays(type, 0, triangles.Length);
 
 			GL.DisableVertexAttribArray(0);
 		}
@@ -81,9 +72,14 @@ namespace Unwind
 		public void Dispose()
 		{
 			GL.DeleteBuffer(positionBuffer);
+		}
 
-			Console.WriteLine("Disposing shape");
-			return;
+		public void Print()
+		{
+			foreach (Vector2 vertex in vertices)
+			{
+				Console.WriteLine(vertex);
+			}
 		}
 	}
 }

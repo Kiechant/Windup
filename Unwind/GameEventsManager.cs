@@ -4,6 +4,13 @@ namespace Unwind
 {
 	public class GameEventsManager
 	{
+		public int program { get; private set; }
+
+		public GameEventsManager(int program)
+		{
+			this.program = program;
+		}
+
 		public event EventHandler<EventArgs> Update;
 
 		public virtual void OnUpdate()

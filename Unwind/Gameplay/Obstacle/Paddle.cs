@@ -35,7 +35,7 @@ namespace Unwind
 			radius -= Time.deltaTimeSeconds * fallRate;
 			ProcessAppearance(out disposed);
 
-			shape.Update();
+			if (!disposed) shape.Update();
 		}
 
 		/* Updates shape appearance following a transformation. */
@@ -47,7 +47,6 @@ namespace Unwind
 
 			if (radius < ringRadius - Thickness)
 			{
-				// TODO: delete object
 				disposed = true;
 				Dispose();
 				return;

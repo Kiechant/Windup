@@ -1,8 +1,13 @@
 #version 120
 
-attribute vec2 position;
+attribute vec3 position;
+uniform mat4 projectionMatrix;
+uniform mat4 modelviewMatrix;
 
 void main()
 {
-	gl_Position = vec4(position, 0.0f, 1.0f);
+    vec4 newPosition = vec4(position, 1.0f);
+    newPosition = modelviewMatrix * newPosition;
+    newPosition = projectionMatrix * newPosition;
+    gl_Position = newPosition;
 }

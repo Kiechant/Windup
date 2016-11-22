@@ -24,5 +24,11 @@ namespace Unwind
 			q.Normalize();
 			return (float)(Math.Atan2(q.X, q.Y) - Math.Atan2(p.X, p.Y));
 		}
+
+		public static float Lerp(float x, float y, float t)
+		{
+			t = MathHelper.Clamp(t, 0, 1);
+			return x + t * (y - x);
+		}
 	}
 }

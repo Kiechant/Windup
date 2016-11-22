@@ -16,15 +16,17 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using Unwind;
 
-namespace StarterKit
+namespace Unwind
 {
     class Game : GameWindow
     {
 		GameEventsManager eventManager;
 		Controller controller;
-		Shader shader;
+		public Shader shader { get; private set; }
+
+		//TODO: move
+		GameRing ring;
 
         public Game()
 			: base(600, 600, GraphicsMode.Default, "Unwind")
@@ -52,12 +54,16 @@ namespace StarterKit
 			controller = new LevelController();
 			controller.Start();
 
-			eventManager = new GameEventsManager();
-
+			eventManager = new GameEventsManager(shader.program);
 			eventManager.Update += Time.OnUpdate;
 			eventManager.Update += controller.OnUpdate;
-
 			eventManager.Render += controller.OnRender;
+
+			ring = new GameRing();
+			eventManager.Update += ring.OnUpdate;
+			eventManager.Render += ring.OnRender;
+			this.MouseUp += ring.OnMouseUp;
+			this.MouseDown += ring.OnMouseDown;
 
             GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
@@ -72,6 +78,9 @@ namespace StarterKit
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projection);
+
+			projection = Matrix4.Identity;
+			GL.UniformMatrix4(shader.projectionLocation, false, ref projection);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -93,6 +102,7 @@ namespace StarterKit
             Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
+			GL.UniformMatrix4(shader.modelviewLocation, false, ref modelview);
 
 			eventManager.OnRender();
 

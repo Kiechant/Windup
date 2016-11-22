@@ -90,6 +90,18 @@ namespace Unwind
 			}
 		}
 
+		/* Removes the number of points defined by n. If n is greater than the size
+		 of vertices, all points are removed and the function returns 0. It is recommended
+		 to use this function for simplifying the creation of curves with appropriate endpoints. */
+		public void Remove(int n)
+		{
+			while (n > 0 && vertices.Count >= n)
+			{
+				vertices.RemoveAt(vertices.Count - 1);
+				n--;
+			}
+		}
+
 		/* Sets the shape to be closed if there are at least three points.
 		 The shape will no longer be mutable and can be built as a mesh. */
 		public void Close()

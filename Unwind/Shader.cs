@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace Unwind
@@ -9,7 +10,9 @@ namespace Unwind
 		/* Handle for OpenGL to reference shader. */
 		const uint ShaderCount = 2;
 
-		int program;
+		public int program { get; private set; }
+		public int modelviewLocation { get; private set; }
+		public int projectionLocation { get; private set; }
 		int[] shaders = new int[ShaderCount];
 
 		public Shader(string fileName)
@@ -30,6 +33,17 @@ namespace Unwind
 
 			GL.ValidateProgram(program);
 			CheckProgramError(program, GetProgramParameterName.ValidateStatus, "ERROR: Program validation failure: ");
+
+			// Set uniform locations
+			modelviewLocation = GL.GetUniformLocation(program, "modelviewMatrix");
+			projectionLocation = GL.GetUniformLocation(program, "projectionMatrix");
+
+			// Initialise uniforms
+			Matrix4 identity;
+			identity = new Matrix4();
+			GL.UniformMatrix4(modelviewLocation, false, ref identity);
+			identity = new Matrix4();
+			GL.UniformMatrix4(projectionLocation, false, ref identity);
 		}
 
 		public void Bind()

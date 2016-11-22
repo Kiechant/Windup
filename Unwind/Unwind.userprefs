@@ -1,14 +1,18 @@
 ﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Mathc.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Shader.cs">
     <Files>
-      <File FileName="Program.cs" Line="86" Column="3" />
-      <File FileName="Shape.cs" Line="63" Column="1" />
-      <File FileName="ShapeBuilder.cs" Line="91" Column="3" />
-      <File FileName="Obstacle.cs" Line="8" Column="37" />
-      <File FileName="Paddle.cs" Line="30" Column="19" />
-      <File FileName="Raindrop.cs" Line="74" Column="4" />
-      <File FileName="LevelController.cs" Line="85" Column="3" />
-      <File FileName="Mathc.cs" Line="18" Column="4" />
+      <File FileName="Program.cs" Line="116" Column="32" />
+      <File FileName="Mathc.cs" Line="26" Column="4" />
+      <File FileName="GameEventsManager.cs" Line="9" Column="31" />
+      <File FileName="Ring.cs" Line="50" Column="1" />
+      <File FileName="GameRing.cs" Line="36" Column="4" />
+      <File FileName="Gameplay/LevelController.cs" Line="46" Column="27" />
+      <File FileName="Geometry/Shape.cs" Line="62" Column="4" />
+      <File FileName="Geometry/ShapeBuilder.cs" Line="149" Column="46" />
+      <File FileName="Gameplay/Obstacle/Obstacle.cs" Line="31" Column="17" />
+      <File FileName="Gameplay/Obstacle/Paddle.cs" Line="51" Column="15" />
+      <File FileName="Gameplay/Obstacle/Raindrop.cs" Line="30" Column="4" />
+      <File FileName="Shader.cs" Line="27" Column="67" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

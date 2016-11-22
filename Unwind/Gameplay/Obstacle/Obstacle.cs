@@ -37,8 +37,6 @@ namespace Unwind
 		public void Dispose()
 		{
 			shape.Dispose();
-			Console.WriteLine("Dispose obstacle " + ID);
-			return;
 		}
 	}
 }
