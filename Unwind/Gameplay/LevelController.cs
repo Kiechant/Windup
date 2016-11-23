@@ -2,6 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Unwind
 {
@@ -66,9 +67,11 @@ namespace Unwind
 		{
 			base.OnRender(source, e);
 
+			var manager = (GameEventsManager)source;
+
 			foreach (Obstacle o in obstacles)
 			{
-				o.Draw();
+				o.Draw(manager.program);
 			}
 		}
 
@@ -78,14 +81,18 @@ namespace Unwind
 			float angSize = (float)random.NextDouble() * (Paddle.MaxSize - Paddle.MinSize) + Paddle.MinSize;
 			uint steps = (uint)(angSize / AngleResolution);
 
-			obstacles.Add(new Paddle(angPos, angSize, steps));
+			Obstacle paddle = new Paddle(angPos, angSize, steps);
+			paddle.colour = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+			obstacles.Add(paddle);
 		}
 
 		private void SpawnRaindrop(Random random)
 		{
 			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
 
-			obstacles.Add(new Raindrop(angPos, 20));
+			Obstacle raindrop = new Raindrop(angPos, 20);
+			raindrop.colour = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+			obstacles.Add(raindrop);
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace Unwind
 				else Unwind();
 
 				// updates appearance
-				UpdateRotation();
+				//UpdateRotation();
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace Unwind
 				else Unwind();
 
 				// updates appearance
-				UpdateRotation();
+				//UpdateRotation();
 			}
 		}
 

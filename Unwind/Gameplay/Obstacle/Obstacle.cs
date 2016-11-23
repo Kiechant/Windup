@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace Unwind
 {
@@ -15,6 +16,8 @@ namespace Unwind
 		protected float angle;
 		public float fallRate;
 
+		public Vector4 colour;
+
 		protected Shape shape = new Shape();
 
 		protected Obstacle()
@@ -26,8 +29,10 @@ namespace Unwind
 
 		public abstract void Update(out bool disposed);
 
-		public void Draw()
+		public void Draw(int program)
 		{
+			int loc = GL.GetAttribLocation(program, "colour");
+			GL.VertexAttrib4(loc, ref colour);
 			shape.Draw();
 
 			// DEBUG

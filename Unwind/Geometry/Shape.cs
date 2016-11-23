@@ -11,6 +11,7 @@ namespace Unwind
 		public Vector2[] vertices;
 		public int[] triangles;
 		public PrimitiveType type;
+		public Vector4 colour;
 
 		public int positionBuffer { get; private set; }
 		private int positionAttrib;

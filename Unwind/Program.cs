@@ -74,7 +74,7 @@ namespace Unwind
 			GL.LoadMatrix(ref modelview);
 			GL.UniformMatrix4(shader.modelviewLocation, false, ref modelview);
 
-			GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
+			GL.ClearColor(1.0f, 0.886f, 0.2f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
         }
 

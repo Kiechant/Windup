@@ -96,7 +96,7 @@ namespace Unwind
 			if (success == 0)
 			{
 				string error = GL.GetProgramInfoLog(program);
-				Console.WriteLine(errorMessage + ": '" + error + "'");
+				Console.WriteLine(errorMessage + "'" + error + "'");
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace Unwind
 			if (success == 0)
 			{
 				string error = GL.GetShaderInfoLog(shader);
-				Console.WriteLine(errorMessage + ": '" + error + "'");
+				Console.WriteLine(errorMessage + "'" + error + "'");
 			}
 		}
 	}

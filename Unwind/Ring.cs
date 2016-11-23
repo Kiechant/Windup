@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -79,6 +80,7 @@ namespace Unwind
 
 			mainRing = new Shape(vertices, indices);
 			mainRing.type = PrimitiveType.TriangleStrip;
+			mainRing.colour = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 
 		private void CreateCursor()
@@ -102,16 +104,11 @@ namespace Unwind
 
 			cursor = new Shape(vertices, indices);
 			cursor.type = PrimitiveType.TriangleFan;
+			cursor.colour = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 
 		protected abstract void Wind();
 		protected abstract void Unwind();
-
-		/* Translates cursor position. */
-		protected void UpdateRotation()
-		{
-			
-		}
 
 		public void Dispose()
 		{
