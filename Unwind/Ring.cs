@@ -37,23 +37,23 @@ namespace Unwind
 		{
 			mainRing.Draw();
 
-			Console.WriteLine("rotating by " + angle);
+			// Generate new matrix using matrix stack
 			GL.MatrixMode(MatrixMode.Modelview);
 			GL.PushMatrix();
 			GL.Rotate(angle, Vector3.UnitZ);
 
-			//GL.Translate(radius * Math.Cos(angle), radius * Math.Sin(angle), 0);
+			// Attach matrix to shader
 			Matrix4 matrix;
 			GL.GetFloat(GetPName.ModelviewMatrix, out matrix);
-
 			var manager = (GameEventsManager)sender;
 			int loc = GL.GetUniformLocation(manager.program, "modelviewMatrix");
 			GL.UniformMatrix4(loc, false, ref matrix);
 
 			cursor.Draw();
-			GL.PopMatrix();
 
-			matrix = new Matrix4();
+			// Reset matrix
+			GL.PopMatrix();
+			GL.GetFloat(GetPName.ModelviewMatrix, out matrix);
 			GL.UniformMatrix4(loc, false, ref matrix);
 		}
 
@@ -110,10 +110,7 @@ namespace Unwind
 		/* Translates cursor position. */
 		protected void UpdateRotation()
 		{
-			Console.WriteLine("moving cursor to " + angle);
-			GL.Translate(radius * Math.Cos(angle), radius * Math.Sin(angle), 0);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, cursor.positionBuffer);
-			GL.Translate(0, 0, 0);
+			
 		}
 
 		public void Dispose()

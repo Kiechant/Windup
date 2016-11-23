@@ -5,7 +5,7 @@ namespace Unwind
 {
 	public abstract class Obstacle : IDisposable
 	{
-		public const float SpawnRadius = 1.0f;
+		public const float SpawnRadius = 2.0f;
 		public const float BaseFallRate = 0.5f;
 
 		private static uint nextID;

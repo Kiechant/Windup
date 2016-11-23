@@ -1,23 +1,26 @@
 ﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Shader.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
     <Files>
-      <File FileName="Program.cs" Line="116" Column="32" />
+      <File FileName="Program.cs" Line="124" Column="2" />
       <File FileName="Mathc.cs" Line="26" Column="4" />
-      <File FileName="GameEventsManager.cs" Line="9" Column="31" />
-      <File FileName="Ring.cs" Line="50" Column="1" />
+      <File FileName="GameEventsManager.cs" Line="26" Column="1" />
+      <File FileName="Ring.cs" Line="68" Column="4" />
       <File FileName="GameRing.cs" Line="36" Column="4" />
       <File FileName="Gameplay/LevelController.cs" Line="46" Column="27" />
-      <File FileName="Geometry/Shape.cs" Line="62" Column="4" />
+      <File FileName="Geometry/Shape.cs" Line="68" Column="4" />
       <File FileName="Geometry/ShapeBuilder.cs" Line="149" Column="46" />
       <File FileName="Gameplay/Obstacle/Obstacle.cs" Line="31" Column="17" />
       <File FileName="Gameplay/Obstacle/Paddle.cs" Line="51" Column="15" />
       <File FileName="Gameplay/Obstacle/Raindrop.cs" Line="30" Column="4" />
-      <File FileName="Shader.cs" Line="27" Column="67" />
+      <File FileName="Shader.cs" Line="20" Column="33" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint enabled="false" file="/Users/Kieren/Documents/Windup/Unwind/Shader.cs" line="38" column="1" />
+      <Breakpoint enabled="false" file="/Users/Kieren/Documents/Windup/Unwind/Program.cs" line="78" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Unwind PreferredExecutionTarget="MonoDevelop.Default" />

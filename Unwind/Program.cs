@@ -54,18 +54,27 @@ namespace Unwind
 			controller = new LevelController();
 			controller.Start();
 
+			// Adds listeners to game events.
 			eventManager = new GameEventsManager(shader.program);
 			eventManager.Update += Time.OnUpdate;
 			eventManager.Update += controller.OnUpdate;
 			eventManager.Render += controller.OnRender;
 
+			// Prepares ring as a listener to multiple game events.
 			ring = new GameRing();
 			eventManager.Update += ring.OnUpdate;
 			eventManager.Render += ring.OnRender;
 			this.MouseUp += ring.OnMouseUp;
 			this.MouseDown += ring.OnMouseDown;
+			this.MouseLeave += ring.OnMouseLeave;
 
-            GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
+			// Prepares modelview matrix.
+			Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.LoadMatrix(ref modelview);
+			GL.UniformMatrix4(shader.modelviewLocation, false, ref modelview);
+
+			GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
         }
 
@@ -75,12 +84,31 @@ namespace Unwind
 
             GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref projection);
-
-			projection = Matrix4.Identity;
+			// Sets new projection matrix to avoid stretching.
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.LoadIdentity();
+			if (Width >= Height)
+			{
+				double aspect = Width / (double)Height;
+				GL.Ortho(-aspect, aspect, -1, 1, -1, 1);
+				//GL.Ortho(-1, 1, -aspect, aspect, -1, 1);
+			}
+			else
+			{
+				double aspect = Height / (double)Width;
+				GL.Ortho(-1, 1, -aspect, aspect, -1, 1);
+				//GL.Ortho(-aspect, aspect, -1, 1, -1, 1);
+			}
+			Matrix4 projection;
+			GL.GetFloat(GetPName.ProjectionMatrix, out projection);
 			GL.UniformMatrix4(shader.projectionLocation, false, ref projection);
+
+			// Sets new projection matrix.
+			//Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 1.0f, 64.0f);
+			//GL.MatrixMode(MatrixMode.Projection);
+			//GL.LoadMatrix(ref projection);
+			//projection = Matrix4.Identity;
+			//GL.UniformMatrix4(shader.projectionLocation, false, ref projection);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -99,9 +127,9 @@ namespace Unwind
 
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
+			// Attaches modelview matrix to uniform variables in shader
+			Matrix4 modelview;
+			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
 			GL.UniformMatrix4(shader.modelviewLocation, false, ref modelview);
 
 			eventManager.OnRender();

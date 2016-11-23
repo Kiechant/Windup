@@ -43,6 +43,11 @@ namespace Unwind
 			mouseDown = false;
 		}
 
+		public void OnMouseLeave(object sender, EventArgs e)
+		{
+			mouseDown = false;
+		}
+
 		public void Update()
 		{
 			if (!unwound || mouseDown /* Get click/tap down */)
