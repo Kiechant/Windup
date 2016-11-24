@@ -25,9 +25,6 @@ namespace Unwind
 		Controller controller;
 		public Shader shader { get; private set; }
 
-		//TODO: move
-		GameRing ring;
-
         public Game()
 			: base(600, 600, GraphicsMode.Default, "Unwind")
         {
@@ -52,21 +49,15 @@ namespace Unwind
 			Time.Start();
 
 			controller = new LevelController();
-			controller.Start();
+			controller.Start(Width, Height);
 
 			// Adds listeners to game events.
-			eventManager = new GameEventsManager(shader.program);
+			eventManager = new GameEventsManager(shader);
 			eventManager.Update += Time.OnUpdate;
 			eventManager.Update += controller.OnUpdate;
 			eventManager.Render += controller.OnRender;
-
-			// Prepares ring as a listener to multiple game events.
-			ring = new GameRing();
-			eventManager.Update += ring.OnUpdate;
-			eventManager.Render += ring.OnRender;
-			this.MouseUp += ring.OnMouseUp;
-			this.MouseDown += ring.OnMouseDown;
-			this.MouseLeave += ring.OnMouseLeave;
+			eventManager.MouseDown += controller.OnMouseDown;
+			eventManager.MouseUp += controller.OnMouseUp;
 
 			// Prepares modelview matrix.
 			Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
@@ -136,6 +127,20 @@ namespace Unwind
 
 			SwapBuffers();
         }
+
+		protected override void OnMouseDown(MouseButtonEventArgs e)
+		{
+			base.OnMouseDown(e);
+
+			eventManager.OnMouseDown();
+		}
+
+		protected override void OnMouseUp(MouseButtonEventArgs e)
+		{
+			base.OnMouseUp(e);
+
+			eventManager.OnMouseUp();
+		}
 
         [STAThread]
         static void Main()

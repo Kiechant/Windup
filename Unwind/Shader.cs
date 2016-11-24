@@ -10,12 +10,32 @@ namespace Unwind
 		/* Handle for OpenGL to reference shader. */
 		const uint ShaderCount = 2;
 
+		public Attributes attributes { get; private set; }
+		public struct Attributes
+		{
+			public int position;
+			public int colourIn;
+		}
+
+		public Uniforms uniforms { get; private set; }
+		public struct Uniforms
+		{
+			public int projectionMatrix;
+			public int modelviewMatrix;
+		}
+
 		public int program { get; private set; }
 		public int modelviewLocation { get; private set; }
 		public int projectionLocation { get; private set; }
 		int[] shaders = new int[ShaderCount];
 
 		public Shader(string fileName)
+		{
+			SetupProgram(fileName);
+			SetupAttribsUniforms();
+		}
+
+		void SetupProgram(string fileName)
 		{
 			program = GL.CreateProgram();
 			shaders[0] = CreateShader(LoadShader(fileName + ".vs"), ShaderType.VertexShader);
@@ -26,24 +46,27 @@ namespace Unwind
 				GL.AttachShader(program, shaders[i]);
 			}
 
-			GL.BindAttribLocation(program, 0, "position");
+			//GL.BindAttribLocation(program, 0, "position");
+			//GL.BindAttribLocation(program, 1, "colourIn");
 
 			GL.LinkProgram(program);
 			CheckProgramError(program, GetProgramParameterName.LinkStatus, "ERROR: Program linkage failure: ");
 
 			GL.ValidateProgram(program);
 			CheckProgramError(program, GetProgramParameterName.ValidateStatus, "ERROR: Program validation failure: ");
+		}
 
-			// Set uniform locations
-			modelviewLocation = GL.GetUniformLocation(program, "modelviewMatrix");
-			projectionLocation = GL.GetUniformLocation(program, "projectionMatrix");
+		void SetupAttribsUniforms()
+		{
+			Attributes attributes;
+			attributes.position = GL.GetAttribLocation(program, "position");
+			attributes.colourIn = GL.GetAttribLocation(program, "colourIn");
+			this.attributes = attributes;
 
-			// Initialise uniforms
-			Matrix4 identity;
-			identity = new Matrix4();
-			GL.UniformMatrix4(modelviewLocation, false, ref identity);
-			identity = new Matrix4();
-			GL.UniformMatrix4(projectionLocation, false, ref identity);
+			Uniforms uniforms;
+			uniforms.modelviewMatrix = GL.GetUniformLocation(program, "modelviewMatrix");
+			uniforms.projectionMatrix = GL.GetUniformLocation(program, "projectionMatrix");
+			this.uniforms = uniforms;
 		}
 
 		public void Bind()

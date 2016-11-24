@@ -21,9 +21,6 @@ namespace Unwind
 		protected Shape mainRing;
 		protected Shape cursor;
 
-		/* Start and Update are called at the beginning
-		of the children's Start and Update functions */
-
 		protected Ring()
 		{
 			radius = 0.2f;
@@ -34,9 +31,9 @@ namespace Unwind
 			CreateCursor();
 		}
 
-		public void OnRender(object sender, EventArgs e)
+		public void Draw(Shader shader)
 		{
-			mainRing.Draw();
+			mainRing.Draw(shader);
 
 			// Generate new matrix using matrix stack
 			GL.MatrixMode(MatrixMode.Modelview);
@@ -46,16 +43,14 @@ namespace Unwind
 			// Attach matrix to shader
 			Matrix4 matrix;
 			GL.GetFloat(GetPName.ModelviewMatrix, out matrix);
-			var manager = (GameEventsManager)sender;
-			int loc = GL.GetUniformLocation(manager.program, "modelviewMatrix");
-			GL.UniformMatrix4(loc, false, ref matrix);
+			GL.UniformMatrix4(shader.uniforms.modelviewMatrix, false, ref matrix);
 
-			cursor.Draw();
+			cursor.Draw(shader);
 
 			// Reset matrix
 			GL.PopMatrix();
 			GL.GetFloat(GetPName.ModelviewMatrix, out matrix);
-			GL.UniformMatrix4(loc, false, ref matrix);
+			GL.UniformMatrix4(shader.uniforms.modelviewMatrix, false, ref matrix);
 		}
 
 		private void CreateMainRing()

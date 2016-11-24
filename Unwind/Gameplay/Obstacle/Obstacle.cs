@@ -16,7 +16,11 @@ namespace Unwind
 		protected float angle;
 		public float fallRate;
 
-		public Vector4 colour;
+		public Vector4 colour
+		{
+			get { return shape.colour; }
+			set { shape.colour = value; }
+		}
 
 		protected Shape shape = new Shape();
 
@@ -29,11 +33,9 @@ namespace Unwind
 
 		public abstract void Update(out bool disposed);
 
-		public void Draw(int program)
+		public void Draw(Shader shader)
 		{
-			int loc = GL.GetAttribLocation(program, "colour");
-			GL.VertexAttrib4(loc, ref colour);
-			shape.Draw();
+			shape.Draw(shader);
 
 			// DEBUG
 			Console.WriteLine("Obstacle " + ID + " drawn.");

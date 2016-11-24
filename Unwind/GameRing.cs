@@ -21,65 +21,18 @@ namespace Unwind
 
 		public bool invulnerable { get; private set; }
 
-		//TODO: Encapsulate in separate class
-		Vector2 mouseCoords;
-		bool mouseDown;
-
 		public GameRing()
 		{
 			windSpeed = 400;
 			invulnerable = false;
 		}
 
-		// TODO: Implement touch support.
-		public void OnMouseDown(object sender, MouseEventArgs e)
+		public void Update(bool mouseDown)
 		{
-			mouseDown = true;
-			mouseCoords = new Vector2(e.Position.X, e.Position.Y);
-		}
-
-		public void OnMouseUp(object sender, MouseEventArgs e)
-		{
-			mouseDown = false;
-		}
-
-		public void OnMouseLeave(object sender, EventArgs e)
-		{
-			mouseDown = false;
-		}
-
-		public void Update()
-		{
-			if (!unwound || mouseDown /* Get click/tap down */)
-			{
-				// mouse down
-				// winds
-				if (mouseDown) Wind();
-
-				// not unwound, mouse up
-				// unwinds
-				else Unwind();
-
-				// updates appearance
-				//UpdateRotation();
-			}
-		}
-
-		public void OnUpdate(object sender, EventArgs e)
-		{
-			if (!unwound || mouseDown /* Get click/tap down */)
-			{
-				// mouse down
-				// winds
-				if (mouseDown) Wind();
-
-				// not unwound, mouse up
-				// unwinds
-				else Unwind();
-
-				// updates appearance
-				//UpdateRotation();
-			}
+			if (mouseDown)
+				Wind();
+			else if (!unwound)
+				Unwind();
 		}
 
 		override protected void Wind()

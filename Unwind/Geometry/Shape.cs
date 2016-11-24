@@ -13,7 +13,7 @@ namespace Unwind
 		public PrimitiveType type;
 		public Vector4 colour;
 
-		public int positionBuffer { get; private set; }
+		public int vertexBuffer { get; private set; }
 		private int positionAttrib;
 		private int indexBuffer;
 		private int indexAttrib;
@@ -33,46 +33,64 @@ namespace Unwind
 			Setup();
 		}
 
+		/* Function to be called by constructors only.
+		 Generates vbo for shape and calls Update. */
 		private void Setup()
 		{
-			positionBuffer = GL.GenBuffer();
+			vertexBuffer = GL.GenBuffer();
 			Update();
 		}
 
 		public void Update()
 		{
-			// Generates triangles as a sequence of floats and assigns them to VBO
+			// Generates vertex data with interleaved position and colour attributes
 
 			int n = triangles.Length;
-			int count = 2 * n;
-			float[] newTriangles = new float[count];
+			int a = 8;
+			int count = a * n;
+			float[] vertexData = new float[count];
 
 			for (int i = 0; i < n; i++)
 			{
+				// Position data
 				Vector2 vertex = vertices[triangles[i]];
-				newTriangles[2 * i] = vertex.X;
-				newTriangles[2 * i + 1] = vertex.Y;
+				vertexData[a * i] = vertex.X;
+				vertexData[a * i + 1] = vertex.Y;
+				vertexData[a * i + 2] = 0.5f;
+				vertexData[a * i + 3] = 1.0f;
+
+				// Colour data
+				vertexData[a * i + 4] = colour.X;
+				vertexData[a * i + 5] = colour.Y;
+				vertexData[a * i + 6] = colour.Z;
+				vertexData[a * i + 7] = colour.W;
 			}
 
-			GL.BindBuffer(BufferTarget.ArrayBuffer, positionBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, count * sizeof(float), newTriangles, BufferUsageHint.DynamicDraw);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, count * sizeof(float), vertexData, BufferUsageHint.DynamicDraw);
 		}
 
-		public void Draw()
+		public void Draw(Shader shader)
 		{
-			GL.BindBuffer(BufferTarget.ArrayBuffer, positionBuffer);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
 
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 0, 0);
-			GL.EnableVertexAttribArray(0);
+			int stride = 8 * sizeof(float);
+
+			GL.VertexAttribPointer(shader.attributes.position, 4, VertexAttribPointerType.Float, false, stride, 0);
+			GL.EnableVertexAttribArray(shader.attributes.position);
+
+			GL.VertexAttribPointer(shader.attributes.colourIn, 4, VertexAttribPointerType.Float, false, stride, 4 * sizeof(float));
+			GL.EnableVertexAttribArray(shader.attributes.colourIn);
 
 			GL.DrawArrays(type, 0, triangles.Length);
 
-			GL.DisableVertexAttribArray(0);
+			GL.DisableVertexAttribArray(shader.attributes.position);
+			GL.DisableVertexAttribArray(shader.attributes.colourIn);
 		}
 
 		public void Dispose()
 		{
-			GL.DeleteBuffer(positionBuffer);
+			GL.DeleteBuffer(vertexBuffer);
 		}
 
 		public void Print()
