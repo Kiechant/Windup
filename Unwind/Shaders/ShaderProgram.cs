@@ -5,16 +5,16 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Unwind
 {
-	public class Shader
+	public class ShaderProgram
 	{
-		/* Handle for OpenGL to reference shader. */
 		const uint ShaderCount = 2;
 
 		public Attributes attributes { get; private set; }
 		public struct Attributes
 		{
 			public int position;
-			public int colourIn;
+			public int colour;
+			public int texcoord;
 		}
 
 		public Uniforms uniforms { get; private set; }
@@ -24,54 +24,59 @@ namespace Unwind
 			public int modelviewMatrix;
 		}
 
+		public string name { get; }
 		public int program { get; private set; }
-		public int modelviewLocation { get; private set; }
-		public int projectionLocation { get; private set; }
 		int[] shaders = new int[ShaderCount];
 
-		public Shader(string fileName)
+		public ShaderProgram(string fileName)
 		{
-			SetupProgram(fileName);
+			name = fileName;
+			SetupProgram();
 			SetupAttribsUniforms();
 		}
 
-		void SetupProgram(string fileName)
+		protected virtual void SetupProgram()
 		{
 			program = GL.CreateProgram();
-			shaders[0] = CreateShader(LoadShader(fileName + ".vs"), ShaderType.VertexShader);
-			shaders[1] = CreateShader(LoadShader(fileName + ".fs"), ShaderType.FragmentShader);
+			shaders[0] = CreateShader(LoadShader(name + ".vs"), ShaderType.VertexShader);
+			shaders[1] = CreateShader(LoadShader(name + ".fs"), ShaderType.FragmentShader);
 
 			for (uint i = 0; i < ShaderCount; i++)
-			{
 				GL.AttachShader(program, shaders[i]);
-			}
 
-			//GL.BindAttribLocation(program, 0, "position");
-			//GL.BindAttribLocation(program, 1, "colourIn");
+			GL.BindAttribLocation(program, 0, "position");
+			GL.BindAttribLocation(program, 1, "colour");
+			GL.BindAttribLocation(program, 2, "texcoord");
 
 			GL.LinkProgram(program);
 			CheckProgramError(program, GetProgramParameterName.LinkStatus, "ERROR: Program linkage failure: ");
 
 			GL.ValidateProgram(program);
 			CheckProgramError(program, GetProgramParameterName.ValidateStatus, "ERROR: Program validation failure: ");
+
+			Debug.GetError();
 		}
 
-		void SetupAttribsUniforms()
+		protected virtual void SetupAttribsUniforms()
 		{
 			Attributes attributes;
 			attributes.position = GL.GetAttribLocation(program, "position");
-			attributes.colourIn = GL.GetAttribLocation(program, "colourIn");
+			attributes.colour = GL.GetAttribLocation(program, "colour");
+			attributes.texcoord = GL.GetAttribLocation(program, "texcoord");
 			this.attributes = attributes;
 
 			Uniforms uniforms;
 			uniforms.modelviewMatrix = GL.GetUniformLocation(program, "modelviewMatrix");
 			uniforms.projectionMatrix = GL.GetUniformLocation(program, "projectionMatrix");
 			this.uniforms = uniforms;
+
+			Debug.GetError();
 		}
 
 		public void Bind()
 		{
 			GL.UseProgram(program);
+			Debug.GetError();
 		}
 
 		public void Destroy()

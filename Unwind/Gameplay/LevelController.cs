@@ -1,8 +1,9 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace Unwind
 {
@@ -23,14 +24,14 @@ namespace Unwind
 
 		// TODO: LevelParameters
 
-		uint unwindCounter;
-		uint scoreCounter;
-		uint playTime;
-		uint maxTime;
+		//uint unwindCounter;
+		//uint scoreCounter;
+		//uint playTime;
+		//uint maxTime;
 
-		public override void Start(int width, int height)
+		public override void Start(Game game)
 		{
-			base.Start(width, height);
+			base.Start(game);
 
 			ring = new GameRing();
 		}
@@ -64,13 +65,17 @@ namespace Unwind
 		public override void OnRender(object source, EventArgs e)
 		{
 			base.OnRender(source, e);
+			var game = source as Game;
+			var effectsShader = game.effectsShader;
 
-			var manager = (GameEventsManager)source;
-			Shader shader = manager.shader;
-			ring.Draw(shader);
+			// Render obstacles on top of backdrop with frosty-glass-like blur effect.
+			game.effectsShader.Bind();
+			ring.Draw(effectsShader);
 
 			foreach (Obstacle o in obstacles)
-				o.Draw(shader);
+				o.Draw(effectsShader);
+			
+			game.basicShader.Bind();
 		}
 
 		private void SpawnPaddle(Random random)
@@ -80,7 +85,7 @@ namespace Unwind
 			uint steps = (uint)(angSize / AngleResolution);
 
 			Obstacle paddle = new Paddle(angPos, angSize, steps);
-			paddle.colour = new Vector4(0.0f, 1.0f, 0.0f, 0.5f);
+			paddle.colour = new Vector4(0.8f, 0.5f, 0.8f, 0.5f);
 			obstacles.Add(paddle);
 		}
 
@@ -89,7 +94,7 @@ namespace Unwind
 			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
 
 			Obstacle raindrop = new Raindrop(angPos, 20);
-			raindrop.colour = new Vector4(0.0f, 0.0f, 0.0f, 0.5f);
+			raindrop.colour = new Vector4(0.2f, 0.4f, 1.0f, 0.5f);
 			obstacles.Add(raindrop);
 		}
 
@@ -97,7 +102,10 @@ namespace Unwind
 		{
 			base.Dispose();
 
-			foreach (var o in obstacles) o.Dispose();
+			ring.Dispose();
+
+			foreach (var o in obstacles)
+				o.Dispose();
 		}
 	}
 }

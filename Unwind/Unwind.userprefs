@@ -1,15 +1,17 @@
 ﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="GameRing.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Filters/Blur.cs">
     <Files>
-      <File FileName="Program.cs" Line="60" Column="47" />
-      <File FileName="Ring.cs" Line="22" Column="26" />
-      <File FileName="Gameplay/Obstacle/Obstacle.cs" Line="43" Column="3" />
-      <File FileName="Shader.cs" Line="64" Column="1" />
-      <File FileName="Controller.cs" Line="56" Column="39" />
-      <File FileName="Geometry/Shape.cs" Line="85" Column="45" />
-      <File FileName="GameEventsManager.cs" Line="18" Column="26" />
-      <File FileName="Gameplay/LevelController.cs" Line="106" Column="4" />
-      <File FileName="GameRing.cs" Line="27" Column="1" />
+      <File FileName="Program.cs" Line="94" Column="4" />
+      <File FileName="Geometry/Shape.cs" Line="129" Column="1" />
+      <File FileName="Gameplay/Obstacles/Obstacle.cs" Line="2" Column="1" />
+      <File FileName="Gameplay/Controller.cs" Line="50" Column="38" />
+      <File FileName="Gameplay/LevelController.cs" Line="69" Column="17" />
+      <File FileName="Gameplay/Ring/GameRing.cs" Line="95" Column="22" />
+      <File FileName="Gameplay/Ring/Ring.cs" Line="51" Column="1" />
+      <File FileName="Shaders/ShaderProgram.cs" Line="80" Column="4" />
+      <File FileName="Gameplay/Backdrop.cs" Line="85" Column="1" />
+      <File FileName="Shaders/EffectsShaderProgram.cs" Line="12" Column="1" />
+      <File FileName="Filters/Blur.cs" Line="5" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

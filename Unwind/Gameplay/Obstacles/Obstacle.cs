@@ -1,4 +1,5 @@
 ﻿using System;
+
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -22,7 +23,7 @@ namespace Unwind
 			set { shape.colour = value; }
 		}
 
-		protected Shape shape = new Shape();
+		protected Shape shape = new Shape(BufferUsageHint.DynamicDraw);
 
 		protected Obstacle()
 		{
@@ -33,7 +34,7 @@ namespace Unwind
 
 		public abstract void Update(out bool disposed);
 
-		public void Draw(Shader shader)
+		public void Draw(ShaderProgram shader)
 		{
 			shape.Draw(shader);
 

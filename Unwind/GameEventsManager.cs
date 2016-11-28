@@ -4,11 +4,11 @@ namespace Unwind
 {
 	public class GameEventsManager
 	{
-		public Shader shader { get; private set; }
+		public GameParameters parameters { get; private set; }
 
-		public GameEventsManager(Shader shader)
+		public GameEventsManager(GameParameters parameters)
 		{
-			this.shader = shader;
+			this.parameters = parameters;
 		}
 
 		public event EventHandler<EventArgs> Update;

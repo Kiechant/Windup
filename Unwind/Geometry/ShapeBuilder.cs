@@ -1,6 +1,7 @@
 ﻿using OpenTK;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace Unwind
@@ -153,6 +154,19 @@ namespace Unwind
 			}
 
 			return shape;
+		}
+
+		/* Creates a new 2D shape with four vertices corresponding to a rectangle
+		 defined by bounds. */
+		public static Shape BuildRectangle(RectangleF bounds)
+		{
+			Vector2 bottomLeft = new Vector2(bounds.Left, bounds.Bottom);
+			Vector2 topLeft = new Vector2(bounds.Left, bounds.Top);
+			Vector2 topRight = new Vector2(bounds.Right, bounds.Top);
+			Vector2 bottomRight = new Vector2(bounds.Right, bounds.Bottom);
+			Vector2[] vertices = { bottomLeft, topLeft, topRight, bottomRight };
+			int[] triangles = { 0, 1, 2, 3 };
+			return new Shape(vertices, triangles);
 		}
 
 		public Vector2[] GetVertices()

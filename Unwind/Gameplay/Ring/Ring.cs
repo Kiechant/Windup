@@ -31,7 +31,7 @@ namespace Unwind
 			CreateCursor();
 		}
 
-		public void Draw(Shader shader)
+		public void Draw(ShaderProgram shader)
 		{
 			mainRing.Draw(shader);
 
@@ -75,7 +75,8 @@ namespace Unwind
 
 			mainRing = new Shape(vertices, indices);
 			mainRing.type = PrimitiveType.TriangleStrip;
-			mainRing.colour = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+			mainRing.colour = new Vector4(0.5f, 0.5f, 0.3f, 1.0f);
+			mainRing.Update();
 		}
 
 		private void CreateCursor()
@@ -99,7 +100,8 @@ namespace Unwind
 
 			cursor = new Shape(vertices, indices);
 			cursor.type = PrimitiveType.TriangleFan;
-			cursor.colour = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+			cursor.colour = new Vector4(0.5f, 0.5f, 0.3f, 1.0f);
+			cursor.Update();
 		}
 
 		protected abstract void Wind();
