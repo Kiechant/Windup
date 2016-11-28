@@ -35,8 +35,12 @@ namespace Unwind
 		public virtual void OnRender(object source, EventArgs e)
 		{
 			var game = source as Game;
-			var pixels = new byte[game.Width * game.Height * 4];
+			int channelsCount = 4;
+			int imageSize = game.Width * game.Height;
+			var backTexture = new byte[imageSize * channelsCount];
+			var blurTexture = new byte[imageSize * channelsCount];
 
+			// Sets modelview and projection matrices of effects shader to current matrices.
 			game.effectsShader.Bind();
 			Matrix4 modelview;
 			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
@@ -51,14 +55,14 @@ namespace Unwind
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			backdrop.Draw(game.effectsShader);
 
-			// Retrieve texture from frame buffer.
+			// Retrieves texture from frame buffer.
 			GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture2D, textureBuffer);
-			GL.ReadPixels(0, 0, game.Width, game.Height, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+			GL.ReadPixels(0, 0, game.Width, game.Height, PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0,
-						  PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+						  PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
 
-			// Render backdrop.
+			// Renders backdrop using effects shader.
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 			game.effectsShader.Bind();
 			Shape back = ShapeBuilder.BuildRectangle(RectangleF.FromLTRB(-1, 1, 1, -1));
@@ -69,35 +73,28 @@ namespace Unwind
 			back.Draw(game.effectsShader);
 			back.Dispose();
 
+			// Blurs background texture using gaussian blur and attaches to texture.
+			var watch = new System.Diagnostics.Stopwatch();
+			watch.Start();
+			for (int i = 0; i < channelsCount - 1; i++)
+			{
+				byte[] src = new byte[imageSize];
+				byte[] dst = new byte[imageSize];
+
+				for (int j = 0; j < imageSize; j++)
+					src[j] = backTexture[4 * j + i];
+
+				Blur.GaussianBlur(src, ref dst, game.Width, game.Height, 20);
+
+				for (int j = 0; j < imageSize; j++)
+					blurTexture[4 * j + i] = src[j];
+			}
+			watch.Stop();
+			Console.WriteLine(watch.ElapsedMilliseconds);
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0,
+			              PixelFormat.Rgba, PixelType.UnsignedByte, blurTexture);
+
 			Debug.GetError();
-		}
-
-		private void Attempt1(int width, int height)
-		{
-			frameBuffer = GL.GenFramebuffer();
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
-
-			// Constructs texture buffer
-			renderedTexture = GL.GenTexture();
-			GL.BindTexture(TextureTarget.Texture2D, renderedTexture);
-			//var texture = new int[width * height];
-			int[] x = { 0 };
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, width, height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, x);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-
-			// Generates render buffer and attaches to frame buffer
-			depthBuffer = GL.GenRenderbuffer();
-			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthBuffer);
-			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, width, height);
-			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, depthBuffer);
-
-			// Sets renderedTexture as colour attachment #0
-			GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, renderedTexture, 0);
-
-			// Sets list of draw buffers
-			DrawBuffersEnum[] drawBuffers = { DrawBuffersEnum.ColorAttachment1 };
-			GL.DrawBuffers(drawBuffers.Length, drawBuffers);
 		}
 
 		private void SetupFrameBuffer(Game game)

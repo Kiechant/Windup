@@ -42,6 +42,13 @@ namespace Unwind
 					temp.Update();
 					shapes.Add(temp);
 
+					temp = new Shape(new float[] { -0.5f, -0.5f, -0.1f, -0.5f, -0.1f, 0.3f, -0.5f, 0.3f });
+					temp.colour = Mathc.ColourToVector4(Color.Gold);
+					temp.type = PrimitiveType.Quads;
+					temp.zPosition = 0.6f;
+					temp.Update();
+					shapes.Add(temp);
+
 					break;
 
 				case ZoneName.Rainstorm:

@@ -2,16 +2,11 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Filters/Blur.cs">
     <Files>
       <File FileName="Program.cs" Line="94" Column="4" />
-      <File FileName="Geometry/Shape.cs" Line="129" Column="1" />
-      <File FileName="Gameplay/Obstacles/Obstacle.cs" Line="2" Column="1" />
-      <File FileName="Gameplay/Controller.cs" Line="50" Column="38" />
+      <File FileName="Gameplay/Controller.cs" Line="70" Column="19" />
       <File FileName="Gameplay/LevelController.cs" Line="69" Column="17" />
-      <File FileName="Gameplay/Ring/GameRing.cs" Line="95" Column="22" />
       <File FileName="Gameplay/Ring/Ring.cs" Line="51" Column="1" />
-      <File FileName="Shaders/ShaderProgram.cs" Line="80" Column="4" />
-      <File FileName="Gameplay/Backdrop.cs" Line="85" Column="1" />
-      <File FileName="Shaders/EffectsShaderProgram.cs" Line="12" Column="1" />
-      <File FileName="Filters/Blur.cs" Line="5" Column="14" />
+      <File FileName="Gameplay/Backdrop.cs" Line="9" Column="15" />
+      <File FileName="Filters/Blur.cs" Line="37" Column="88" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
