@@ -56,5 +56,41 @@ namespace Unwind
 			output.W = colour.A / 255.0F;
 			return output;
 		}
+
+		/* TODO: Move Mathc Mipmapping function to appropriate class
+		 or replace with OpenGL 3.0+ functionality. */
+		/* Generates mipmap texture at a particular level for a four channel texture with
+		 byte pixel format. */
+		public static void GenerateMipmapTexture(byte[] src, int level, int width, int height, out byte[] dst)
+		{
+			if (level == 0)
+			{
+				dst = new byte[src.Length];
+				for (int i = 0; i < src.Length; i++)
+					dst[i] = src[i];
+			}
+			else
+			{
+				int n = 4; // Number of channels
+				int h = height / 2, w = width / 2;
+				var med = new byte[src.Length / 4];
+
+				for (int ch = 0; ch < n; ch++)
+				{
+					for (int i = 0; i < h; i++)
+					{
+						for (int j = 0; j < w; j++)
+						{
+							int r = n * width * i, s = 2 * n * j, t = 2 * r;
+							int u = t + s + ch, v = u + n * width;
+							double val = src[u] + src[u + n] + src[v] + src[v + n];
+							med[(n * w * i) + (n * j) + ch] = (byte)Math.Round(val / 4);
+						}
+					}
+				}
+
+				GenerateMipmapTexture(med, level - 1, w, h, out dst);
+			}
+		}
 	}
 }

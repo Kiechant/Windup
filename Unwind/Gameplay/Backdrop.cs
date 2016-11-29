@@ -35,14 +35,14 @@ namespace Unwind
 					background.zPosition = 0.7f;
 					background.Update();
 
-					Shape temp = new Shape(new float[] { 0.0f, 0.5f, 0.25f, 0.5f, 0.25f, 0.75f, 0.0f, 0.75f });
+					Shape temp = new Shape(new float[] { 0.0f, 0.75f, 0.25f, 0.5f, 0.25f, 0.75f, 0.0f, 0.75f });
 					temp.colour = Mathc.ColourToVector4(Color.Goldenrod);
 					temp.type = PrimitiveType.Quads;
 					temp.zPosition = 0.6f;
 					temp.Update();
 					shapes.Add(temp);
 
-					temp = new Shape(new float[] { -0.5f, -0.5f, -0.1f, -0.5f, -0.1f, 0.3f, -0.5f, 0.3f });
+					temp = new Shape(new float[] { -0.5f, -0.55f, 0.3f, -0.5f, 0.4f, 0.3f, -0.5f, 0.3f });
 					temp.colour = Mathc.ColourToVector4(Color.Gold);
 					temp.type = PrimitiveType.Quads;
 					temp.zPosition = 0.6f;

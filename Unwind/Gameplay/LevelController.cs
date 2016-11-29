@@ -68,7 +68,7 @@ namespace Unwind
 			var game = source as Game;
 			var effectsShader = game.effectsShader;
 
-			// Render obstacles on top of backdrop with frosty-glass-like blur effect.
+			// Renders obstacles on top of backdrop with frosty-glass-like blur effect.
 			game.effectsShader.Bind();
 			ring.Draw(effectsShader);
 
