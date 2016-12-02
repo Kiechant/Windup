@@ -41,16 +41,16 @@ namespace Unwind
 			GL.Rotate(angle, Vector3.UnitZ);
 
 			// Attach matrix to shader
-			Matrix4 matrix;
-			GL.GetFloat(GetPName.ModelviewMatrix, out matrix);
-			GL.UniformMatrix4(shader.uniforms.modelviewMatrix, false, ref matrix);
+			Matrix4 modelview;
+			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
+			GL.UniformMatrix4(shader.uniforms.modelviewMatrix, false, ref modelview);
 
 			cursor.Draw(shader);
 
 			// Reset matrix
 			GL.PopMatrix();
-			GL.GetFloat(GetPName.ModelviewMatrix, out matrix);
-			GL.UniformMatrix4(shader.uniforms.modelviewMatrix, false, ref matrix);
+			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
+			GL.UniformMatrix4(shader.uniforms.modelviewMatrix, false, ref modelview);
 		}
 
 		private void CreateMainRing()

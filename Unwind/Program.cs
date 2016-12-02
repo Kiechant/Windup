@@ -52,8 +52,8 @@ namespace Unwind
 			Console.WriteLine(GL.GetString(StringName.Version));
 
 			//parameters = new GameParameters();
-			basicShader = new ShaderProgram("./res/BasicShader");
-			effectsShader = new EffectsShaderProgram("./res/EffectsShader");
+			basicShader = new ShaderProgram("./res/ColourShader.vs", "./res/BasicShader.fs");
+			effectsShader = new EffectsShaderProgram("./res/TextureShader.vs", "./res/EffectsShader.fs");
 
 			basicShader.Bind();
 		}
@@ -120,6 +120,8 @@ namespace Unwind
 			//GL.LoadMatrix(ref projection);
 			//projection = Matrix4.Identity;
 			//GL.UniformMatrix4(shader.projectionLocation, false, ref projection);
+
+			controller.OnResize(this, e);
 		}
 
 		protected override void OnUpdateFrame(FrameEventArgs e)

@@ -11,10 +11,7 @@ namespace Unwind
 		protected int frameBuffer;
 		protected int textureBuffer;
 
-		//TODO: remove variables
-		protected int renderedTexture;
-		protected int colourBuffer;
-		protected int depthBuffer;
+		protected EffectsShaderProgram blurShader;
 
 		protected bool mouseDown;
 
@@ -22,9 +19,10 @@ namespace Unwind
 
 		public virtual void Start(Game game)
 		{
-			OnResize(game, new EventArgs());
+			blurShader = new EffectsShaderProgram("./res/TextureShader.vs", "./res/BlurShader.fs");
 			backdrop = new Backdrop(ZoneName.Dawn, RectangleF.FromLTRB(-1, 1, 1, -1));
 			SetupFrameBuffer(game);
+			OnResize(game, new EventArgs());
 		}
 
 		public virtual void OnUpdate(object source, EventArgs e)
@@ -37,89 +35,62 @@ namespace Unwind
 			var game = source as Game;
 			int channelsCount = 4;
 			int imageSize = game.Width * game.Height;
-			//int width = game.Width;
-			//int height = game.Height;
 			var backTexture = new byte[imageSize * channelsCount];
-			var blurTexture = new byte[imageSize * channelsCount];
 
 			// Sets modelview and projection matrices of effects shader to current matrices.
+
 			game.effectsShader.Bind();
-			Matrix4 modelview;
+
+			Matrix4 modelview = Matrix4.Identity;
 			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
-			GL.UniformMatrix4(game.effectsShader.uniforms.modelviewMatrix, false, ref modelview);
 			Matrix4 projection;
 			GL.GetFloat(GetPName.ProjectionMatrix, out projection);
-			GL.UniformMatrix4(game.effectsShader.uniforms.projectionMatrix, false, ref projection);
+			float aspect = game.Width / (float)game.Height;
 
-			// Bind and reset new frame buffer. Draw backdrop onto buffer.
+			GL.UniformMatrix4(game.effectsShader.uniforms.modelviewMatrix, false, ref modelview);
+			GL.UniformMatrix4(game.effectsShader.uniforms.projectionMatrix, false, ref projection);
+			GL.Uniform1(game.effectsShader.uniformAspect, aspect);
+			GL.Uniform1(game.effectsShader.uniformMipmapLevel, 0.0f);
+
+			// Binds and resets new frame buffer. Draws backdrop onto buffer.
+
 			game.basicShader.Bind();
+
+			modelview.Column0 = new Vector4(-modelview.Column0.X, modelview.Column0.Y, modelview.Column0.Z, modelview.Column0.W);
+			GL.UniformMatrix4(game.basicShader.uniforms.modelviewMatrix, false, ref modelview);
+
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
 			FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
 			if (status != FramebufferErrorCode.FramebufferComplete)
 				throw new Exception("Frame buffer not complete!\n");
+			
 			backdrop.Draw(game.effectsShader);
 
-			// Retrieves texture from frame buffer.
+			modelview.Column0 = new Vector4(-modelview.Column0.X, modelview.Column0.Y, modelview.Column0.Z, modelview.Column0.W);
+			GL.UniformMatrix4(game.basicShader.uniforms.modelviewMatrix, false, ref modelview);
+
+			// Retrieves texture from frame buffer and attaches to target texture sampler.
+
 			GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture2D, textureBuffer);
 			GL.ReadPixels(0, 0, game.Width, game.Height, PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
-
-			byte[] mipLvl1, mipLvl2, mipLvl3;
-			Mathc.GenerateMipmapTexture(backTexture, 1, game.Width, game.Height, out mipLvl1);
-			Mathc.GenerateMipmapTexture(mipLvl1, 1, game.Width / 2, game.Height / 2, out mipLvl2);
-			// Proof of concept recursion from backTexture all the way to mipLvl3
-			Mathc.GenerateMipmapTexture(backTexture, 3, game.Width, game.Height, out mipLvl3);
-
-			//GL.TexImage2D(TextureTarget.Texture2D, 2, PixelInternalFormat.Rgba, game.Width / 16, game.Height / 16, 0,
-			//			  PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
-			//GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0,
 						  PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
-			GL.TexImage2D(TextureTarget.Texture2D, 1, PixelInternalFormat.Rgba, game.Width / 2, game.Height / 2, 0,
-						  PixelFormat.Rgba, PixelType.UnsignedByte, mipLvl1);
-			GL.TexImage2D(TextureTarget.Texture2D, 2, PixelInternalFormat.Rgba, game.Width / 4, game.Height / 4, 0,
-						  PixelFormat.Rgba, PixelType.UnsignedByte, mipLvl2);
-			GL.TexImage2D(TextureTarget.Texture2D, 3, PixelInternalFormat.Rgba, game.Width / 8, game.Height / 8, 0,
-						  PixelFormat.Rgba, PixelType.UnsignedByte, mipLvl3);
-			
-			// Renders backdrop using effects shader.
+
+			// Draws backdrop to default frame bluffer.
+
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-			game.effectsShader.Bind();
-			Shape back = ShapeBuilder.BuildRectangle(RectangleF.FromLTRB(-1, 1, 1, -1));
-			back.colour = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-			back.zPosition = 0.8f;
-			back.type = PrimitiveType.Quads;
-			back.Update();
-			back.Draw(game.effectsShader);
-			back.Dispose();
-
-			// Blurs background texture using gaussian blur and attaches to texture.
-			//var watch = new System.Diagnostics.Stopwatch();
-			//watch.Start();
-			//for (int i = 0; i < channelsCount - 1; i++)
-			//{
-			//	byte[] src = new byte[imageSize];
-			//	byte[] dst = new byte[imageSize];
-
-			//	for (int j = 0; j < imageSize; j++)
-			//		src[j] = backTexture[4 * j + i];
-
-			//	Blur.GaussianBlur(src, ref dst, game.Width, game.Height, 20);
-
-			//	for (int j = 0; j < imageSize; j++)
-			//		blurTexture[4 * j + i] = src[j];
-			//}
-			//watch.Stop();
-			//Console.WriteLine(watch.ElapsedMilliseconds);
-			//GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0,
-			              //PixelFormat.Rgba, PixelType.UnsignedByte, blurTexture);
+			backdrop.Draw(game.effectsShader);
 
 			Debug.GetError();
 		}
 
 		private void SetupFrameBuffer(Game game)
 		{
+			game.effectsShader.Bind();
+
 			Matrix4 modelview;
 			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
 			GL.UniformMatrix4(game.effectsShader.uniforms.modelviewMatrix, false, ref modelview);
@@ -137,26 +108,29 @@ namespace Unwind
 			GL.MatrixMode(MatrixMode.Projection);
 			GL.LoadMatrix(ref projection);
 
-			// Generates and attaches texture buffer for storing output of fragment shader.
 			textureBuffer = GL.GenTexture();
 			GL.BindTexture(TextureTarget.Texture2D, textureBuffer);
-			//GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, game.Width, game.Height, 0, PixelFormat.Rgba,
-			//              PixelType.UnsignedByte, new IntPtr());
+
 			// Generates mipmaps.
 			int w = game.Width, h = game.Height;
-			int maxLevel = 3;
-			for (int i = 0; i <= maxLevel; i++, w /= 2, h /= 2)
-			{
-				GL.TexImage2D(TextureTarget.Texture2D, i, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba,
+			int maxLevel = 0;
+			//int maxLevel = 3;
+			//for (int i = 0; i <= maxLevel; i++, w /= 2, h /= 2)
+			//{
+			//	GL.TexImage2D(TextureTarget.Texture2D, i, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba,
+			//				  PixelType.UnsignedByte, new IntPtr());
+			//}
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0, PixelFormat.Rgba,
 							  PixelType.UnsignedByte, new IntPtr());
-			}
-			
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.NearestMipmapNearest);
+
+			// Sets texture parameters.
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapNearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, maxLevel);
+
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0,
 									TextureTarget.Texture2D, textureBuffer, 0);
 
@@ -173,11 +147,28 @@ namespace Unwind
 				throw new Exception("Frame buffer not complete!\n");
 			Debug.GetError();
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+			game.basicShader.Bind();
 		}
 
 		public virtual void OnResize(object source, EventArgs e)
 		{
-			// TODO: fill with something...
+			var game = source as Game;
+			int w = game.Width, h = game.Height;
+			float aspect;
+			RectangleF bounds;
+
+			if (w >= h)
+			{
+				aspect = w / (float)h;
+				bounds = RectangleF.FromLTRB(-aspect, 1, aspect, -1);
+			}
+			else
+			{
+				aspect = h / (float)w;
+				bounds = RectangleF.FromLTRB(-1, aspect, 1, -aspect);
+			}
+
+			backdrop.Resize(bounds);
 		}
 
 		public virtual void OnMouseUp(object source, EventArgs e)
@@ -196,9 +187,6 @@ namespace Unwind
 
 			GL.DeleteFramebuffer(frameBuffer);
 			GL.DeleteTexture(textureBuffer);
-			GL.DeleteTexture(renderedTexture);
-			GL.DeleteRenderbuffer(colourBuffer);
-			GL.DeleteRenderbuffer(depthBuffer);
 		}
 	}
 }

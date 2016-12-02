@@ -1,14 +1,18 @@
 ﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Miscellaneous/Mathc.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
     <Files>
-      <File FileName="Program.cs" Line="27" Column="1" />
-      <File FileName="Gameplay/Controller.cs" Line="185" Column="38" />
-      <File FileName="Gameplay/LevelController.cs" Line="71" Column="40" />
-      <File FileName="Gameplay/Ring/Ring.cs" Line="71" Column="5" />
+      <File FileName="Program.cs" Line="56" Column="33" />
+      <File FileName="Gameplay/Controller.cs" Line="61" Column="41" />
+      <File FileName="Gameplay/LevelController.cs" Line="34" Column="1" />
+      <File FileName="Gameplay/Ring/Ring.cs" Line="73" Column="36" />
       <File FileName="Gameplay/Backdrop.cs" Line="51" Column="6" />
       <File FileName="Filters/Blur.cs" Line="25" Column="21" />
-      <File FileName="Geometry/Shape.cs" Line="131" Column="4" />
-      <File FileName="Miscellaneous/Mathc.cs" Line="38" Column="52" />
+      <File FileName="Geometry/Shape.cs" Line="105" Column="45" />
+      <File FileName="Miscellaneous/Mathc.cs" Line="92" Column="1" />
+      <File FileName="Shaders/EffectsShaderProgram.cs" Line="18" Column="32" />
+      <File FileName="Geometry/ShapeBuilder.cs" Line="169" Column="1" />
+      <File FileName="Shaders/ShaderProgram.cs" Line="43" Column="35" />
+      <File FileName="Gameplay/GameParameters.cs" Line="17" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

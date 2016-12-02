@@ -24,13 +24,15 @@ namespace Unwind
 			public int modelviewMatrix;
 		}
 
-		public string name { get; }
+		public string VSName { get; }
+		public string FSName { get; }
 		public int program { get; private set; }
 		int[] shaders = new int[ShaderCount];
 
-		public ShaderProgram(string fileName)
+		public ShaderProgram(string vertexShader, string fragmentShader)
 		{
-			name = fileName;
+			VSName = vertexShader;
+			FSName = fragmentShader;
 			SetupProgram();
 			SetupAttribsUniforms();
 		}
@@ -38,12 +40,11 @@ namespace Unwind
 		protected virtual void SetupProgram()
 		{
 			program = GL.CreateProgram();
-			shaders[0] = CreateShader(LoadShader(name + ".vs"), ShaderType.VertexShader);
-			shaders[1] = CreateShader(LoadShader(name + ".fs"), ShaderType.FragmentShader);
-
+			shaders[0] = CreateShader(LoadShader(VSName), ShaderType.VertexShader);
+			shaders[1] = CreateShader(LoadShader(FSName), ShaderType.FragmentShader);
 			for (uint i = 0; i < ShaderCount; i++)
 				GL.AttachShader(program, shaders[i]);
-
+			
 			GL.BindAttribLocation(program, 0, "position");
 			GL.BindAttribLocation(program, 1, "colour");
 			GL.BindAttribLocation(program, 2, "texcoord");

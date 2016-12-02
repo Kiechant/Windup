@@ -93,6 +93,15 @@ namespace Unwind
 			background.Draw(shader);
 		}
 
+		public void Resize(RectangleF bounds)
+		{
+			background.vertices[0] = new Vector2(bounds.Left, bounds.Bottom);
+			background.vertices[1] = new Vector2(bounds.Left, bounds.Top);
+			background.vertices[2] = new Vector2(bounds.Right, bounds.Top);
+			background.vertices[3] = new Vector2(bounds.Right, bounds.Bottom);
+			background.Update();
+		}
+
 		public void Dispose()
 		{
 			foreach (var shape in shapes)
