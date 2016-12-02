@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -86,7 +86,7 @@ namespace Unwind
 			uint steps = (uint)(angSize / AngleResolution);
 
 			Obstacle paddle = new Paddle(angPos, angSize, steps);
-			paddle.colour = new Vector4(0.8f, 0.5f, 0.8f, 0.5f);
+			paddle.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.7f);
 			obstacles.Add(paddle);
 		}
 
@@ -95,7 +95,7 @@ namespace Unwind
 			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
 
 			Obstacle raindrop = new Raindrop(angPos, 20);
-			raindrop.colour = new Vector4(0.2f, 0.4f, 1.0f, 0.5f);
+			raindrop.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.7f);
 			obstacles.Add(raindrop);
 		}
 

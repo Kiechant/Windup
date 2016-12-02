@@ -10,7 +10,7 @@ const float blurSize = 1 / 200.0f;
 
 void main()
 {
-    vec4 colourSum = vec4(0.0f);
+    vec3 colourSum = vec3(0.0f);
     
     for (int x = -4; x <= 4; x++)
     {
@@ -18,7 +18,7 @@ void main()
         {
             float dx = Texcoord.x + x * blurSize;
             float dy = Texcoord.y + y * blurSize;
-            vec4 pixelColour = texture2D(texFramebuffer, vec2(dx, dy), mipmapLevel);
+            vec3 pixelColour = texture2D(texFramebuffer, vec2(dx, dy), mipmapLevel).xyz;
             colourSum += pixelColour * pixelColour;
         }
     }
@@ -26,5 +26,8 @@ void main()
     colourSum /= 81;
     colourSum = sqrt(colourSum);
     
-    gl_FragColor = Colour * colourSum;
+    vec3 rgb = Colour.xyz;
+    rgb = rgb * Colour.a + colourSum * (1 - Colour.a);
+    
+    gl_FragColor = vec4(rgb, 1);
 }

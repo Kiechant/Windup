@@ -46,6 +46,15 @@ namespace Unwind
 			return a;
 		}
 
+		public static Vector3 ColourToVector3(System.Drawing.Color colour)
+		{
+			Vector3 output;
+			output.X = colour.R / 255.0f;
+			output.Y = colour.G / 255.0f;
+			output.Z = colour.B / 255.0f;
+			return output;
+		}
+
 		// TODO: Move ColorToVec4 function
 		public static Vector4 ColourToVector4(System.Drawing.Color colour)
 		{
