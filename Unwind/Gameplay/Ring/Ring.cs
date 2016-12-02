@@ -38,7 +38,7 @@ namespace Unwind
 			// Generate new matrix using matrix stack
 			GL.MatrixMode(MatrixMode.Modelview);
 			GL.PushMatrix();
-			GL.Rotate(angle, Vector3.UnitZ);
+			GL.Rotate(angle, -Vector3.UnitZ);
 
 			// Attach matrix to shader
 			Matrix4 modelview;

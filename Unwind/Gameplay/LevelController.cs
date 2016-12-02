@@ -71,17 +71,6 @@ namespace Unwind
 			// Renders obstacles on top of backdrop with frosty-glass-like blur effect.
 			blurShader.Bind();
 
-			Matrix4 modelview;
-			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
-			Matrix4 projection;
-			GL.GetFloat(GetPName.ProjectionMatrix, out projection);
-			float aspect = game.Width / (float)game.Height;
-
-			GL.UniformMatrix4(game.effectsShader.uniforms.modelviewMatrix, false, ref modelview);
-			GL.UniformMatrix4(game.effectsShader.uniforms.projectionMatrix, false, ref projection);
-			GL.Uniform1(blurShader.uniformMipmapLevel, 0.0f);
-			GL.Uniform1(blurShader.uniformAspect, aspect);
-
 			ring.Draw(blurShader);
 
 			foreach (Obstacle o in obstacles)

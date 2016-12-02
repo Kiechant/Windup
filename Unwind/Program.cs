@@ -69,11 +69,20 @@ namespace Unwind
 
 			SetupEvents();
 
-			// Prepares modelview matrix
-			Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
-			GL.MatrixMode(MatrixMode.Modelview);
-			GL.LoadMatrix(ref modelview);
+			// Prepares default modelview and projection matrices for basic and effects shaders.
+
+			Matrix4 modelview = CreateModelviewMatrix();
+			Matrix4 projection = UpdateProjectionMatrix();
+			
 			GL.UniformMatrix4(basicShader.uniforms.modelviewMatrix, false, ref modelview);
+			GL.UniformMatrix4(basicShader.uniforms.projectionMatrix, false, ref projection);
+
+			// Sets up effects shader.
+			effectsShader.Bind();
+			GL.UniformMatrix4(effectsShader.uniforms.modelviewMatrix, false, ref modelview);
+			GL.UniformMatrix4(basicShader.uniforms.projectionMatrix, false, ref projection);
+			GL.Uniform1(effectsShader.uniformMipmapLevel, 0.0f);
+			basicShader.Bind();
 
 			GL.ClearColor(1.0f, 0.886f, 0.2f, 0.0f);
 			GL.Enable(EnableCap.DepthTest);
@@ -95,33 +104,18 @@ namespace Unwind
 
 		protected override void OnResize(EventArgs e)
 		{
+			base.OnResize(e);
+
 			GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
-			// Sets new projection matrix to avoid stretching.
-			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadIdentity();
-			if (Width >= Height)
-			{
-				double aspect = Width / (double)Height;
-				GL.Ortho(-aspect, aspect, -1, 1, -1, 1);
-			}
-			else
-			{
-				double aspect = Height / (double)Width;
-				GL.Ortho(-1, 1, -aspect, aspect, -1, 1);
-			}
-			Matrix4 projection;
-			GL.GetFloat(GetPName.ProjectionMatrix, out projection);
+			Matrix4 projection = UpdateProjectionMatrix();
+
 			GL.UniformMatrix4(basicShader.uniforms.projectionMatrix, false, ref projection);
 
-			// Sets new projection matrix.
-			//Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 1.0f, 64.0f);
-			//GL.MatrixMode(MatrixMode.Projection);
-			//GL.LoadMatrix(ref projection);
-			//projection = Matrix4.Identity;
-			//GL.UniformMatrix4(shader.projectionLocation, false, ref projection);
-
-			controller.OnResize(this, e);
+			effectsShader.Bind();
+			GL.UniformMatrix4(effectsShader.uniforms.projectionMatrix, false, ref projection);
+			GL.Uniform1(effectsShader.uniformAspect, Width / (float)Height);
+			basicShader.Bind();
 		}
 
 		protected override void OnUpdateFrame(FrameEventArgs e)
@@ -140,13 +134,6 @@ namespace Unwind
 			base.OnRenderFrame(e);
 
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-			// Attaches modelview matrix to uniform variables in shader
-			Matrix4 modelview;
-			GL.GetFloat(GetPName.ModelviewMatrix, out modelview);
-			GL.UniformMatrix4(basicShader.uniforms.modelviewMatrix, false, ref modelview);
-
-			Debug.GetError();
 		}
 
 		protected void EndRenderFrame(object sender, FrameEventArgs e)
@@ -161,6 +148,35 @@ namespace Unwind
 			controller.Dispose();
 			basicShader.Destroy();
 			effectsShader.Destroy();
+		}
+
+		private Matrix4 CreateModelviewMatrix()
+		{
+			GL.MatrixMode(MatrixMode.Modelview);
+			Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, -Vector3.UnitZ, Vector3.UnitY);
+			GL.LoadMatrix(ref modelview);
+			return modelview;
+		}
+
+		private Matrix4 UpdateProjectionMatrix()
+		{
+			GL.MatrixMode(MatrixMode.Projection);
+			GL.LoadIdentity();
+
+			if (Width >= Height)
+			{
+				double aspect = Width / (double)Height;
+				GL.Ortho(-aspect, aspect, -1, 1, 10, -10);
+			}
+			else
+			{
+				double aspect = Height / (double)Width;
+				GL.Ortho(-1, 1, -aspect, aspect, 10, -10);
+			}
+
+			Matrix4 projection;
+			GL.GetFloat(GetPName.ProjectionMatrix, out projection);
+			return projection;
 		}
 
 		[STAThread]

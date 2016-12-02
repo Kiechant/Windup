@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GameEventsManager.cs" />
     <Compile Include="Gameplay\LevelController.cs" />
     <Compile Include="Gameplay\Obstacles\Obstacle.cs" />
     <Compile Include="Gameplay\Obstacles\Paddle.cs" />
@@ -57,7 +56,6 @@
     <Compile Include="Geometry\Shape.cs" />
     <Compile Include="Geometry\ShapeBuilder.cs" />
     <Compile Include="Geometry\Triangulation.cs" />
-    <Compile Include="Gameplay\GameParameters.cs" />
     <Compile Include="Gameplay\Zone.cs" />
     <Compile Include="Shaders\EffectsShaderProgram.cs" />
     <Compile Include="Shaders\ShaderProgram.cs" />
