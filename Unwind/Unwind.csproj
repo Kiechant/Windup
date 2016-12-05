@@ -66,6 +66,9 @@
     <Compile Include="Miscellaneous\Mathc.cs" />
     <Compile Include="Miscellaneous\Time.cs" />
     <Compile Include="Filters\Blur.cs" />
+    <Compile Include="Constraints\Canvas.cs" />
+    <Compile Include="Constraints\Constraint.cs" />
+    <Compile Include="Constraints\Constrainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -81,6 +84,7 @@
     <Folder Include="Miscellaneous\" />
     <Folder Include="Gameplay\Ring\" />
     <Folder Include="Filters\" />
+    <Folder Include="Constraints\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

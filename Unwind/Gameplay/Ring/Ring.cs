@@ -75,7 +75,7 @@ namespace Unwind
 
 			mainRing = new Shape(vertices, indices);
 			mainRing.type = PrimitiveType.TriangleStrip;
-			mainRing.colour = new Vector4(0.5f, 0.5f, 0.3f, 1.0f);
+			mainRing.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.7f);
 			mainRing.Update();
 		}
 
@@ -100,7 +100,7 @@ namespace Unwind
 
 			cursor = new Shape(vertices, indices);
 			cursor.type = PrimitiveType.TriangleFan;
-			cursor.colour = new Vector4(0.5f, 0.5f, 0.3f, 1.0f);
+			cursor.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.7f);
 			cursor.Update();
 		}
 

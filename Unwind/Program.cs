@@ -11,6 +11,7 @@
 // Released under the MIT License
 
 using System;
+using System.Drawing;
 
 using OpenTK;
 using OpenTK.Graphics;
@@ -34,6 +35,12 @@ namespace Unwind
 	{
 		//public GameParameters parameters { get; private set; }
 		Controller controller;
+
+		// Canvases and constraints testing. TODO: Encapsulate/refactor
+		RectangleF GLBounds;
+		public Canvas mainCanvas { get; private set; }
+		public Canvas gameplayCanvas;
+		Constrainer gameplayConstrainer;
 
 		public ShaderProgram basicShader { get; private set; }
 		public EffectsShaderProgram effectsShader { get; private set; }
@@ -66,6 +73,8 @@ namespace Unwind
 
 			controller = new LevelController();
 			controller.Start(this);
+
+			SetCanvases();
 
 			SetupEvents();
 
@@ -104,9 +113,12 @@ namespace Unwind
 
 		protected override void OnResize(EventArgs e)
 		{
-			base.OnResize(e);
-
 			GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
+
+			SetCanvases();
+			gameplayConstrainer.OnResize(this, new EventArgs());
+
+			base.OnResize(e);
 
 			Matrix4 projection = UpdateProjectionMatrix();
 
@@ -131,9 +143,11 @@ namespace Unwind
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
 			base.OnRenderFrame(e);
 
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			mainCanvas.Draw(this);
 		}
 
 		protected void EndRenderFrame(object sender, FrameEventArgs e)
@@ -166,17 +180,36 @@ namespace Unwind
 			if (Width >= Height)
 			{
 				double aspect = Width / (double)Height;
-				GL.Ortho(-aspect, aspect, -1, 1, 10, -10);
+				GL.Ortho(-aspect, aspect, -1, 1, -10, 1000);
+				GLBounds = RectangleF.FromLTRB((float)-aspect, 1, (float)aspect, -1);
+				//GL.Frustum(-aspect, aspect, -1, 1, 10, 100);
 			}
 			else
 			{
 				double aspect = Height / (double)Width;
-				GL.Ortho(-1, 1, -aspect, aspect, 10, -10);
+				GL.Ortho(-1, 1, -aspect, aspect, -10, 1000);
+				GLBounds = RectangleF.FromLTRB(-1, (float)aspect, 1, (float)-aspect);
+				//GL.Frustum(-1, 1, -aspect, aspect, 10, 100);
 			}
 
+			//Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1, 10, 100);
+			//GL.LoadMatrix(ref projection);
 			Matrix4 projection;
 			GL.GetFloat(GetPName.ProjectionMatrix, out projection);
 			return projection;
+		}
+
+		private void SetCanvases()
+		{
+			mainCanvas = new Canvas(ClientRectangle);
+			gameplayCanvas = new Canvas(ClientRectangle);
+			gameplayCanvas.Top += 100;
+
+			gameplayConstrainer = new Constrainer(mainCanvas);
+			var one = Constraint.CreateAbsolute(mainCanvas, Anchor.Left, 0);
+			var two = Constraint.CreateAbsolute(mainCanvas, Anchor.Bottom, 0);
+			gameplayConstrainer = new Constrainer(mainCanvas, one, two);
+			gameplayConstrainer.canvasToConstrain = gameplayCanvas;
 		}
 
 		[STAThread]

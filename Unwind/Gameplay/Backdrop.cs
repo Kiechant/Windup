@@ -32,20 +32,20 @@ namespace Unwind
 					background = ShapeBuilder.BuildRectangle(bounds);
 					background.colour = Mathc.ColourToVector4(Color.Red);
 					background.type = PrimitiveType.Quads;
-					background.zPosition = 0.7f;
+					background.zPosition = 0.0f;
 					background.Update();
 
 					Shape temp = new Shape(new float[] { 0.0f, 0.75f, 0.25f, 0.5f, 0.25f, 0.75f, 0.0f, 0.75f });
 					temp.colour = Mathc.ColourToVector4(Color.Goldenrod);
 					temp.type = PrimitiveType.Quads;
-					temp.zPosition = 0.6f;
+					temp.zPosition = 0.0f;
 					temp.Update();
 					shapes.Add(temp);
 
 					temp = new Shape(new float[] { -0.5f, -0.55f, 0.3f, -0.5f, 0.4f, 0.3f, -0.5f, 0.3f });
 					temp.colour = Mathc.ColourToVector4(Color.Gold);
 					temp.type = PrimitiveType.Quads;
-					temp.zPosition = 0.6f;
+					temp.zPosition = 0.0f;
 					temp.Update();
 					shapes.Add(temp);
 

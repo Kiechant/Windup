@@ -13,7 +13,7 @@ namespace Unwind
 		public int[] triangles;
 		public PrimitiveType type;
 		public Vector4 colour;
-		public float zPosition = 0.5f;
+		public float zPosition = 10.0f;
 
 		BufferUsageHint _usageHint;
 		public BufferUsageHint usageHint

@@ -1,22 +1,27 @@
 ﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Gameplay/Ring/Ring.cs">
     <Files>
-      <File FileName="Program.cs" Line="113" Column="23" />
-      <File FileName="Gameplay/Controller.cs" Line="24" Column="27" />
-      <File FileName="Gameplay/LevelController.cs" Line="112" Column="2" />
-      <File FileName="Gameplay/Ring/Ring.cs" Line="41" Column="22" />
-      <File FileName="Gameplay/Backdrop.cs" Line="20" Column="29" />
-      <File FileName="Filters/Blur.cs" Line="25" Column="21" />
-      <File FileName="Geometry/Shape.cs" Line="26" Column="23" />
-      <File FileName="Miscellaneous/Mathc.cs" Line="92" Column="1" />
-      <File FileName="Shaders/EffectsShaderProgram.cs" Line="15" Column="1" />
-      <File FileName="Geometry/ShapeBuilder.cs" Line="161" Column="23" />
-      <File FileName="Shaders/ShaderProgram.cs" Line="74" Column="1" />
+      <File FileName="Program.cs" Line="135" Column="1" />
+      <File FileName="Gameplay/Controller.cs" Line="50" Column="23" />
+      <File FileName="Gameplay/LevelController.cs" Line="60" Column="1" />
+      <File FileName="Gameplay/Ring/Ring.cs" Line="36" Column="1" />
+      <File FileName="Gameplay/Backdrop.cs" Line="44" Column="6" />
+      <File FileName="Geometry/Shape.cs" Line="138" Column="67" />
+      <File FileName="Constraints/Canvas.cs" Line="38" Column="30" />
+      <File FileName="Constraints/Constraint.cs" Line="28" Column="53" />
+      <File FileName="Constraints/Constrainer.cs" Line="82" Column="1" />
+      <File FileName="Gameplay/Obstacles/Obstacle.cs" Line="1" Column="1" />
+      <File FileName="Gameplay/Obstacles/Paddle.cs" Line="1" Column="1" />
+      <File FileName="Gameplay/Ring/GameRing.cs" Line="30" Column="36" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint enabled="false" file="/Users/Kieren/Documents/Windup/Unwind/Gameplay/LevelController.cs" line="134" column="1" />
+      <Breakpoint enabled="false" file="/Users/Kieren/Documents/Windup/Unwind/Constraints/Constrainer.cs" line="82" column="1" />
+      <Breakpoint enabled="false" file="/Users/Kieren/Documents/Windup/Unwind/Gameplay/LevelController.cs" line="139" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Unwind PreferredExecutionTarget="MonoDevelop.Default" />

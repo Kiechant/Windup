@@ -64,19 +64,32 @@ namespace Unwind
 
 		public override void OnRender(object source, EventArgs e)
 		{
-			base.OnRender(source, e);
 			var game = source as Game;
 			var effectsShader = game.effectsShader;
 
+			base.OnRender(source, e);
+
 			// Renders obstacles on top of backdrop with frosty-glass-like blur effect.
 			blurShader.Bind();
+
+			Vector2 screen = game.gameplayCanvas.Centre();
+			Vector2 trans = new Vector2(screen.X - game.ClientRectangle.X, screen.Y - game.ClientRectangle.Y);
+			Vector2 transWorld = ScreenToWorld(trans, game.Width, game.Height);
+			Vector3 transVector = new Vector3(transWorld.X, transWorld.Y, 0);
+
+			GL.MatrixMode(MatrixMode.Modelview);
+			GL.Translate(transVector);
 
 			ring.Draw(blurShader);
 
 			foreach (Obstacle o in obstacles)
 				o.Draw(blurShader);
+
+			GL.Translate(-transVector);
 			
 			game.basicShader.Bind();
+
+			game.gameplayCanvas.Draw(game);
 		}
 
 		private void SpawnPaddle(Random random)
@@ -107,6 +120,26 @@ namespace Unwind
 
 			foreach (var o in obstacles)
 				o.Dispose();
+		}
+
+		/* Turns screen coordinates in pixels from the top left corner to world coordinates. */
+		public static Vector2 ScreenToWorld(Vector2 screen, int width, int height)
+		{
+			Vector2 world = new Vector2();
+			screen.Y = height - screen.Y;
+
+			if (width >= height)
+			{
+				world.X = (2.0f / height) * screen.X - width / (float)height;
+				world.Y = (2.0f / height) * screen.Y - 1.0f;
+			}
+			else
+			{
+				world.X = (2.0f / width) * screen.X - 1.0f;
+				world.Y = (2.0f / width) * screen.Y - height / (float)width;
+			}
+
+			return world;
 		}
 	}
 }

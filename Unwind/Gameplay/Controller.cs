@@ -26,7 +26,6 @@ namespace Unwind
 
 		public virtual void OnUpdate(object source, EventArgs e)
 		{
-			Game game = source as Game;
 			backdrop.Update();
 		}
 
