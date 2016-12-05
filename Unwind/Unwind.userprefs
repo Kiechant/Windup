@@ -1,18 +1,19 @@
 ﻿<Properties StartupConfiguration="{647A4DF5-BFFD-4A96-9789-CE510BC5CE0C}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Constraints/Constrainer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Shaders/ShaderProgram.cs">
     <Files>
-      <File FileName="Program.cs" Line="96" Column="35" />
-      <File FileName="Gameplay/Controller.cs" Line="49" Column="28" />
-      <File FileName="Gameplay/LevelController.cs" Line="131" Column="24" />
-      <File FileName="Gameplay/Ring/Ring.cs" Line="39" Column="40" />
+      <File FileName="Program.cs" Line="28" Column="1" />
+      <File FileName="Gameplay/Controller.cs" Line="108" Column="4" />
+      <File FileName="Gameplay/LevelController.cs" Line="87" Column="26" />
+      <File FileName="Gameplay/Ring/Ring.cs" Line="105" Column="4" />
       <File FileName="Gameplay/Backdrop.cs" Line="69" Column="64" />
-      <File FileName="Geometry/Shape.cs" Line="138" Column="67" />
+      <File FileName="Geometry/Shape.cs" Line="125" Column="4" />
       <File FileName="Constraints/Canvas.cs" Line="34" Column="49" />
       <File FileName="Constraints/Constraint.cs" Line="45" Column="25" />
-      <File FileName="Constraints/Constrainer.cs" Line="114" Column="8" />
+      <File FileName="Constraints/Constrainer.cs" Line="90" Column="25" />
       <File FileName="Gameplay/Obstacles/Obstacle.cs" Line="1" Column="1" />
       <File FileName="Gameplay/Obstacles/Paddle.cs" Line="1" Column="1" />
       <File FileName="Gameplay/Ring/GameRing.cs" Line="30" Column="36" />
+      <File FileName="Shaders/ShaderProgram.cs" Line="74" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

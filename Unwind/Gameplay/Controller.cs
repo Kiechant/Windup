@@ -112,7 +112,7 @@ namespace Unwind
 			GL.ReadPixels(0, 0, game.Width, game.Height, PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0,
 			              PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
-
+			
 			// Re-draws backdrop to visible default frame buffer.
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 			backdrop.Draw(game.effectsShader);

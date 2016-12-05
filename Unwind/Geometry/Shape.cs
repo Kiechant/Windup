@@ -139,16 +139,21 @@ namespace Unwind
 			GL.EnableVertexAttribArray(shader.attributes.colour);
 			Debug.GetError();
 
-			GL.VertexAttribPointer(shader.attributes.texcoord, 2, VertexAttribPointerType.Float, false, stride, 8 * sizeof(float));
-			GL.EnableVertexAttribArray(shader.attributes.texcoord);
-			Debug.GetError();
+			if (shader.attributes.texcoord != -1)
+			{
+				GL.VertexAttribPointer(shader.attributes.texcoord, 2, VertexAttribPointerType.Float, false, stride, 8 * sizeof(float));
+				GL.EnableVertexAttribArray(shader.attributes.texcoord);
+				Debug.GetError();
+			}
 
 			GL.DrawArrays(type, 0, triangles.Length);
-
 			Debug.GetError();
+
 			GL.DisableVertexAttribArray(shader.attributes.position);
 			GL.DisableVertexAttribArray(shader.attributes.colour);
-			GL.DisableVertexAttribArray(shader.attributes.texcoord);
+			if (shader.attributes.texcoord != -1)
+				GL.DisableVertexAttribArray(shader.attributes.texcoord);
+			Debug.GetError();
 		}
 
 		public void Dispose()

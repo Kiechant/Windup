@@ -104,7 +104,7 @@ namespace Unwind
 			uint steps = (uint)(angSize / AngleResolution);
 
 			Obstacle paddle = new Paddle(angPos, angSize, steps);
-			paddle.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.7f);
+			paddle.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.5f);
 			obstacles.Add(paddle);
 		}
 
@@ -113,7 +113,7 @@ namespace Unwind
 			float angPos = ((float)random.NextDouble() * (AngleSteps - 1)) * AngleResolution;
 
 			Obstacle raindrop = new Raindrop(angPos, 20);
-			raindrop.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.7f);
+			raindrop.colour = new Vector4(Mathc.ColourToVector3(Color.Black), 0.5f);
 			obstacles.Add(raindrop);
 		}
 
