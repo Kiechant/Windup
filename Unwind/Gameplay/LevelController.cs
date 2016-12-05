@@ -72,6 +72,10 @@ namespace Unwind
 			// Renders obstacles on top of backdrop with frosty-glass-like blur effect.
 			blurShader.Bind();
 
+			GL.Enable(EnableCap.ScissorTest);
+			Rectangle frame = Rectangle.Truncate(game.gameplayCanvas.frame);
+			GL.Scissor(frame.Left, game.Height - frame.Bottom, frame.Width, frame.Height);
+
 			Vector2 screen = game.gameplayCanvas.Centre();
 			Vector2 trans = new Vector2(screen.X - game.ClientRectangle.X, screen.Y - game.ClientRectangle.Y);
 			Vector2 transWorld = ScreenToWorld(trans, game.Width, game.Height);
@@ -86,6 +90,7 @@ namespace Unwind
 				o.Draw(blurShader);
 
 			GL.Translate(-transVector);
+			GL.Disable(EnableCap.ScissorTest);
 			
 			game.basicShader.Bind();
 

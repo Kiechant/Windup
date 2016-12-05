@@ -10,6 +10,8 @@ namespace Unwind
 	{
 		protected int frameBuffer;
 		protected int textureBuffer;
+		protected int depthBuffer;
+		protected int stencilBuffer;
 
 		protected EffectsShaderProgram blurShader;
 
@@ -47,32 +49,6 @@ namespace Unwind
 			game.basicShader.Bind();
 		}
 
-		public virtual void OnRender(object source, EventArgs e)
-		{
-			var game = source as Game;
-			int channelsCount = 4;
-			int imageSize = game.Width * game.Height;
-			var backTexture = new byte[channelsCount * imageSize];
-
-			// Draws background on non-visible interim frame buffer with basic shader.
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			backdrop.Draw(game.effectsShader);
-
-			// Retrieves texture from frame buffer and attaches to target texture sampler.
-			GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, textureBuffer);
-			GL.ReadPixels(0, 0, game.Width, game.Height, PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0,
-						  PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
-
-			// Re-draws backdrop to visible default frame buffer.
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-			backdrop.Draw(game.effectsShader);
-
-			Debug.GetError();
-		}
-
 		private void SetupFrameBuffer(Game game)
 		{
 			// Geeerates and binds frame buffer.
@@ -84,12 +60,12 @@ namespace Unwind
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0,
 									TextureTarget.Texture2D, textureBuffer, 0);
 
-			// Generates and attaches render buffer for storing depth information from buffers.
-			int rboDepth = GL.GenRenderbuffer();
-			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
+			// Generates and attaches render buffer for storing depth information.
+			depthBuffer = GL.GenRenderbuffer();
+			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthBuffer);
 			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, game.Width, game.Height);
 			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment,
-									   RenderbufferTarget.Renderbuffer, rboDepth);
+									   RenderbufferTarget.Renderbuffer, depthBuffer);
 
 			// Checks for errors in frame buffer creation.
 			FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
@@ -118,6 +94,32 @@ namespace Unwind
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
 		}
 
+		public virtual void OnRender(object source, EventArgs e)
+		{
+			var game = source as Game;
+			int channelsCount = 4;
+			int imageSize = game.Width * game.Height;
+			var backTexture = new byte[channelsCount * imageSize];
+
+			// Draws background on non-visible interim frame buffer with basic shader.
+			GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			backdrop.Draw(game.effectsShader);
+
+			// Retrieves texture from frame buffer and attaches to target texture sampler.
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture2D, textureBuffer);
+			GL.ReadPixels(0, 0, game.Width, game.Height, PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, game.Width, game.Height, 0,
+			              PixelFormat.Rgba, PixelType.UnsignedByte, backTexture);
+
+			// Re-draws backdrop to visible default frame buffer.
+			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+			backdrop.Draw(game.effectsShader);
+
+			Debug.GetError();
+		}
+
 		public virtual void OnResize(object source, EventArgs e)
 		{
 			mouseDown = false;
@@ -135,6 +137,7 @@ namespace Unwind
 
 			GL.DeleteFramebuffer(frameBuffer);
 			GL.DeleteTexture(textureBuffer);
+			GL.DeleteRenderbuffer(depthBuffer);
 			SetupFrameBuffer(game);
 
 			UpdateBlurShader(game);
@@ -155,6 +158,7 @@ namespace Unwind
 			backdrop.Dispose();
 			GL.DeleteFramebuffer(frameBuffer);
 			GL.DeleteTexture(textureBuffer);
+			GL.DeleteRenderbuffer(depthBuffer);
 		}
 	}
 }

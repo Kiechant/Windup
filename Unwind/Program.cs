@@ -35,9 +35,9 @@ namespace Unwind
 	{
 		//public GameParameters parameters { get; private set; }
 		Controller controller;
+		public RectangleF GLBounds { get; private set; }
 
 		// Canvases and constraints testing. TODO: Encapsulate/refactor
-		RectangleF GLBounds;
 		public Canvas mainCanvas { get; private set; }
 		public Canvas gameplayCanvas;
 		Constrainer gameplayConstrainer;
@@ -143,7 +143,7 @@ namespace Unwind
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 
 			base.OnRenderFrame(e);
 
